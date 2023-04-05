@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
+}
+
+subprojects {
+    apply plugin: "java"
+    apply plugin: 'com.github.johnrengelman.shadow'
+    repositories {
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven {
+            url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+            content {
+                includeGroup 'org.bukkit'
+                includeGroup 'org.spigotmc'
+            }
+        }
+        maven {
+            name = "github"
+            url = "https://maven.pkg.github.com/Slikey/EffectLib"
+        }
+        maven { url "https://repo.dmulloy2.net/repository/public/" }
+        maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url = 'https://oss.sonatype.org/content/repositories/central' }
+        maven { url "https://maven.enginehub.org/repo/" }
+        maven { url "https://repo.codemc.org/repository/maven-public/"}
+    }
+}
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(8))
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+
+dependencies {
+    implementation project(path: ':core', configuration: 'shadow')
+    implementation project(path: ':current', configuration: 'shadow')
+    implementation project(path: ':legacy', configuration: 'shadow')
+    implementation project(path: ':v1_12_R1', configuration: 'shadow')
+    implementation project(path: ':v1_13_R2', configuration: 'shadow')
+    implementation project(path: ':v1_14_R1', configuration: 'shadow')
+    implementation project(path: ':v1_16_R3', configuration: 'shadow')
+}
+
+shadowJar {
+    setArchivesBaseName("MagicSpells")
+    relocate("org.apache.commons.math3", "com.nisovin.magicspells.shaded.org.apache.commons.math3")
+    relocate("de.slikey", "com.nisovin.magicspells.shaded.de.slikey")
+    relocate("kotlin", "com.nisovin.magicspells.shaded.kotlin")
+    relocate("org.codemc","com.nisovin.magicspells.shaded.org.codemc")
+    exclude("*.php")
+}

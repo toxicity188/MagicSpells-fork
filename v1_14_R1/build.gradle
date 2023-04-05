@@ -1,0 +1,16 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.8.20'
+}
+dependencies {
+    compileOnly project(":core")
+    compileOnly fileTree(dir: 'lib', include: ['*.jar'])
+}
+compileKotlin {
+    kotlinOptions.jvmTarget = '1.8'
+}
+
+shadowJar {
+    dependencies {
+        exclude(dependency("org.jetbrains:annotations:13.0"))
+    }
+}
