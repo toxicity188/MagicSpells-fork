@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
@@ -316,7 +318,7 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			ProjectileTracker tracker = new ProjectileTracker(caster, power);
 			setupProjectile(tracker);
@@ -327,7 +329,7 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		ProjectileTracker tracker = new ProjectileTracker(caster, power);
 		setupProjectile(tracker);
 		tracker.start(target);
@@ -336,7 +338,7 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		Location targetLoc = target.clone();
 		if (Float.isNaN(targetLoc.getPitch())) targetLoc.setPitch(0);
 		ProjectileTracker tracker = new ProjectileTracker(null, power);
@@ -346,7 +348,7 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, Power power) {
 		if (!caster.getLocation().getWorld().equals(target.getLocation().getWorld())) return false;
 		Location targetLoc = from.clone();
 		if (Float.isNaN(targetLoc.getPitch())) targetLoc.setPitch(0);
@@ -358,7 +360,7 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(Location from, LivingEntity target, Power power) {
 		if (!from.getWorld().equals(target.getLocation().getWorld())) return false;
 		Location targetLoc = from.clone();
 		if (Float.isNaN(targetLoc.getPitch())) targetLoc.setPitch(0);
@@ -370,7 +372,7 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!caster.getLocation().getWorld().equals(target.getLocation().getWorld())) return false;
 		ProjectileTracker tracker = new ProjectileTracker(caster, power);
 		setupProjectile(tracker);
@@ -380,7 +382,7 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return false;
 	}
 

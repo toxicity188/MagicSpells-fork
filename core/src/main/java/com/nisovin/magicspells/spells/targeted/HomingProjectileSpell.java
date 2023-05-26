@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -171,7 +173,7 @@ public class HomingProjectileSpell extends TargetedSpell implements TargetedEnti
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> targetInfo = getTargetedEntity(livingEntity, power);
 			if (targetInfo == null) return noTarget(livingEntity);
@@ -183,26 +185,26 @@ public class HomingProjectileSpell extends TargetedSpell implements TargetedEnti
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		new HomingProjectileMonitor(caster, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return false;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		new HomingProjectileMonitor(caster, from, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(Location from, LivingEntity target, Power power) {
 		return false;
 	}
 
@@ -256,13 +258,13 @@ public class HomingProjectileSpell extends TargetedSpell implements TargetedEnti
 		private LivingEntity target;
 		private BoundingBox hitBox;
 		private Vector currentVelocity;
-		private float power;
+		private Power power;
 		private long startTime;
 
 		private int taskId;
 		private int counter = 0;
 
-		private HomingProjectileMonitor(LivingEntity caster, LivingEntity target, float power) {
+		private HomingProjectileMonitor(LivingEntity caster, LivingEntity target, Power power) {
 			this.caster = caster;
 			this.target = target;
 			this.power = power;
@@ -271,7 +273,7 @@ public class HomingProjectileSpell extends TargetedSpell implements TargetedEnti
 			initialize();
 		}
 
-		private HomingProjectileMonitor(LivingEntity caster, Location startLocation, LivingEntity target, float power) {
+		private HomingProjectileMonitor(LivingEntity caster, Location startLocation, LivingEntity target, Power power) {
 			this.caster = caster;
 			this.target = target;
 			this.power = power;
@@ -301,7 +303,7 @@ public class HomingProjectileSpell extends TargetedSpell implements TargetedEnti
 			}
 
 			currentVelocity = target.getLocation().add(0, 0.75, 0).toVector().subtract(projectile.getLocation().toVector()).normalize();
-			currentVelocity.multiply(velocity * power);
+			currentVelocity.multiply(velocity * power.floatValue());
 			currentVelocity.setY(currentVelocity.getY() + 0.15);
 			projectile.setVelocity(currentVelocity);
 
@@ -351,7 +353,7 @@ public class HomingProjectileSpell extends TargetedSpell implements TargetedEnti
 			targetLoc.setY(target.getLocation().getY() + targetRelativeOffset.getY());
 
 			currentVelocity = targetLoc.toVector().subtract(projectile.getLocation().toVector()).normalize();
-			currentVelocity.multiply(velocity * power);
+			currentVelocity.multiply(velocity * power.floatValue());
 			currentVelocity.setY(currentVelocity.getY() + 0.15);
 			projectile.setVelocity(currentVelocity);
 			currentLocation = projectile.getLocation();

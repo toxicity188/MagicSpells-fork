@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -110,7 +112,7 @@ public class PulserSpell extends TargetedSpell implements TargetedLocationSpell 
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			if (capPerPlayer > 0) {
 				int count = 0;
@@ -146,7 +148,7 @@ public class PulserSpell extends TargetedSpell implements TargetedLocationSpell 
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		Block block = target.getBlock();
 		if (yOffset > 0) block = block.getRelative(BlockFace.UP, yOffset);
 		else if (yOffset < 0) block = block.getRelative(BlockFace.DOWN, yOffset);
@@ -164,11 +166,11 @@ public class PulserSpell extends TargetedSpell implements TargetedLocationSpell 
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return castAtLocation(null, target, power);
 	}
 
-	private void createPulser(LivingEntity caster, Block block, float power) {
+	private void createPulser(LivingEntity caster, Block block, Power power) {
 		if (material == null) return;
 		block.setType(material);
 		pulsers.put(block, new Pulser(caster, block, power));
@@ -245,10 +247,10 @@ public class PulserSpell extends TargetedSpell implements TargetedLocationSpell 
 		private LivingEntity caster;
 		private Block block;
 		private Location location;
-		private float power;
+		private Power power;
 		private int pulseCount;
 		
-		private Pulser(LivingEntity caster, Block block, float power) {
+		private Pulser(LivingEntity caster, Block block, Power power) {
 			this.caster = caster;
 			this.block = block;
 			this.location = block.getLocation().add(0.5, 0.5, 0.5);

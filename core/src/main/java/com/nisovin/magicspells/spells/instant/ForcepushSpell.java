@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 
 import org.bukkit.util.Vector;
@@ -33,14 +35,14 @@ public class ForcepushSpell extends InstantSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			knockback(livingEntity, power);
 		}
 		return PostCastAction.HANDLE_NORMALLY;
 	}
 	
-	private void knockback(LivingEntity livingEntity, float basePower) {
+	private void knockback(LivingEntity livingEntity, Power basePower) {
 		List<Entity> entities = livingEntity.getNearbyEntities(radius, radius, radius);
 		Vector e;
 		Vector v;
@@ -50,7 +52,7 @@ public class ForcepushSpell extends InstantSpell {
 			if (!validTargetList.canTarget(livingEntity, entity)) continue;
 
 			LivingEntity target = (LivingEntity) entity;
-			float power = basePower;
+			Power power = basePower;
 			SpellTargetEvent event = new SpellTargetEvent(this, livingEntity, target, power);
 			EventUtil.call(event);
 			if (event.isCancelled()) continue;
@@ -59,10 +61,10 @@ public class ForcepushSpell extends InstantSpell {
 			power = event.getPower();
 			
 			e = target.getLocation().toVector();
-			v = e.subtract(p).normalize().multiply(force * power);
+			v = e.subtract(p).normalize().multiply(force * power.doubleValue());
 
-			if (force != 0) v.setY(v.getY() + (yForce * power));
-			else v.setY(yForce * power);
+			if (force != 0) v.setY(v.getY() + (yForce * power.doubleValue()));
+			else v.setY(yForce * power.doubleValue());
 			if (v.getY() > (maxYForce)) v.setY(maxYForce);
 
 			if (addVelocityInstead) target.setVelocity(target.getVelocity().add(v));

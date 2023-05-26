@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -147,7 +149,7 @@ public class TotemSpell extends TargetedSpell implements TargetedLocationSpell, 
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			if (capPerPlayer > 0) {
 				int count = 0;
@@ -184,7 +186,7 @@ public class TotemSpell extends TargetedSpell implements TargetedLocationSpell, 
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		Block block = target.getBlock();
 		if (yOffset > 0) block = block.getRelative(BlockFace.UP, yOffset);
 		else if (yOffset < 0) block = block.getRelative(BlockFace.DOWN, yOffset);
@@ -202,11 +204,11 @@ public class TotemSpell extends TargetedSpell implements TargetedLocationSpell, 
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return castAtLocation(null, target, power);
 	}
 
-	private void createTotem(LivingEntity caster, Location loc, float power) {
+	private void createTotem(LivingEntity caster, Location loc, Power power) {
 		totems.add(new Totem(caster, loc, power));
 		ticker.start();
 		if (caster != null) playSpellEffects(caster, loc);
@@ -252,10 +254,10 @@ public class TotemSpell extends TargetedSpell implements TargetedLocationSpell, 
 		private Location totemLocation;
 		private EntityEquipment totemEquipment;
 
-		private float power;
+		private Power power;
 		private int pulseCount;
 
-		private Totem(LivingEntity caster, Location loc, float power) {
+		private Totem(LivingEntity caster, Location loc, Power power) {
 			this.caster = caster;
 			this.power = power;
 

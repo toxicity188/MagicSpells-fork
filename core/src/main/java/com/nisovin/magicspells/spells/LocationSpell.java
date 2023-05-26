@@ -1,6 +1,7 @@
 package com.nisovin.magicspells.spells;
 
 import com.nisovin.magicspells.Spell;
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
@@ -55,7 +56,7 @@ public class LocationSpell extends InstantSpell implements SingleSpellSupplier {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Location loc = location.getLocation();
 			if (loc == null) return PostCastAction.ALREADY_HANDLED;

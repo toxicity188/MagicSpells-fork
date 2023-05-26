@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
@@ -164,7 +166,7 @@ public class ConjureSpell extends InstantSpell implements TargetedEntitySpell, T
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (itemTypes == null) return PostCastAction.ALREADY_HANDLED;
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			if (delay >= 0) MagicSpells.scheduleDelayedTask(() -> conjureItems((Player) livingEntity, power), delay);
@@ -174,7 +176,7 @@ public class ConjureSpell extends InstantSpell implements TargetedEntitySpell, T
 		
 	}
 	
-	private void conjureItems(Player player, float power) {
+	private void conjureItems(Player player, Power power) {
 		List<ItemStack> items = new ArrayList<>();
 		if (calculateDropsIndividually) individual(items, power);
 		else together(items, power);
@@ -238,15 +240,15 @@ public class ConjureSpell extends InstantSpell implements TargetedEntitySpell, T
 		playSpellEffects(EffectPosition.CASTER, player);
 	}
 	
-	private void individual(List<ItemStack> items, float power) {
+	private void individual(List<ItemStack> items, Power power) {
 		for (int i = 0; i < itemTypes.length; i++) {
 			double r = rand.nextDouble() * 100;
-			if (powerAffectsChance) r = r / power;
+			if (powerAffectsChance) r = r / power.doubleValue();
 			if (itemTypes[i] != null && r < itemChances[i]) addItem(i, items, power);
 		}
 	}
 	
-	private void together(List<ItemStack> items, float power) {
+	private void together(List<ItemStack> items, Power power) {
 		double r = rand.nextDouble() * 100;
 		double m = 0;
 		for (int i = 0; i < itemTypes.length; i++) {
@@ -257,10 +259,10 @@ public class ConjureSpell extends InstantSpell implements TargetedEntitySpell, T
 		}
 	}
 	
-	private void addItem(int i, List<ItemStack> items, float power) {
+	private void addItem(int i, List<ItemStack> items, Power power) {
 		int quant = itemMinQuantities[i];
 		if (itemMaxQuantities[i] > itemMinQuantities[i]) quant = rand.nextInt(itemMaxQuantities[i] - itemMinQuantities[i]) + itemMinQuantities[i];
-		if (powerAffectsQuantity) quant = Math.round(quant * power);
+		if (powerAffectsQuantity) quant = Math.round(quant * power.intValue());
 		if (quant > 0) {
 			ItemStack item = itemTypes[i].clone();
 			item.setAmount(quant);
@@ -270,12 +272,12 @@ public class ConjureSpell extends InstantSpell implements TargetedEntitySpell, T
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		return castAtLocation(target, power);
 	}
 	
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		List<ItemStack> items = new ArrayList<>();
 		if (calculateDropsIndividually) individual(items, power);
 		else together(items, power);
@@ -299,12 +301,12 @@ public class ConjureSpell extends InstantSpell implements TargetedEntitySpell, T
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		return castAtEntity(target, power);
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		if (!(target instanceof Player)) {
 			castAtLocation(target.getLocation(), power);
 			return true;

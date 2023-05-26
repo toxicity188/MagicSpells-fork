@@ -1,5 +1,6 @@
 package com.nisovin.magicspells.events;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.entity.LivingEntity;
@@ -16,10 +17,10 @@ public class SpellTargetEvent extends SpellEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
 	private LivingEntity target;
-	private float power;
+	private Power power;
 	private boolean cancelled = false;
 	
-	public SpellTargetEvent(Spell spell, LivingEntity caster, LivingEntity target, float power) {
+	public SpellTargetEvent(Spell spell, LivingEntity caster, LivingEntity target, Power power) {
 		super(spell, caster);
 		this.target = target;
 		this.power = power;
@@ -45,7 +46,7 @@ public class SpellTargetEvent extends SpellEvent implements Cancellable {
 	 * Gets the current power level of the spell. Spells start at a power level of 1.0.
 	 * @return the power level
 	 */
-	public float getPower() {
+	public Power getPower() {
 		return power;
 	}
 	
@@ -53,7 +54,7 @@ public class SpellTargetEvent extends SpellEvent implements Cancellable {
 	 * Sets the power level for the spell being cast.
 	 * @param power the power level
 	 */
-	public void setPower(float power) {
+	public void setPower(Power power) {
 		this.power = power;
 	}
 	
@@ -61,8 +62,8 @@ public class SpellTargetEvent extends SpellEvent implements Cancellable {
 	 * Increases the power lever for the spell being cast by the given multiplier.
 	 * @param power the power level multiplier
 	 */
-	public void increasePower(float power) {
-		this.power *= power;
+	public void increasePower(Power power) {
+		this.power = this.power.multiply(power);
 	}
 
 	@Override

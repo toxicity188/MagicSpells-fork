@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import org.bukkit.entity.Player;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.conversations.Conversation;
@@ -23,7 +25,7 @@ public class ConversationSpell extends TargetedSpell implements TargetedEntitySp
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<Player> targetInfo = getTargetedPlayer(livingEntity, power);
 			if (targetInfo == null || targetInfo.getTarget() == null) return noTarget(livingEntity);
@@ -35,13 +37,13 @@ public class ConversationSpell extends TargetedSpell implements TargetedEntitySp
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		conversate(target);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return false;
 	}
 

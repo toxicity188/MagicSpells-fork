@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -43,7 +45,7 @@ public class EnchantSpell extends InstantSpell {
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		ItemStack targetItem = livingEntity.getEquipment().getItemInMainHand();
 		if (targetItem == null) return PostCastAction.ALREADY_HANDLED;
 		enchant(targetItem);

@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.List;
 import java.util.TreeSet;
@@ -32,7 +34,7 @@ public class VinesSpell extends TargetedSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			List<Block> target = getLastTwoTargetedBlocks(caster, power);
 			if (target == null || target.size() != 2) return noTarget(caster);

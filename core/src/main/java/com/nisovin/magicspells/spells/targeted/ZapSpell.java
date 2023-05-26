@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.List;
 import java.util.Arrays;
@@ -68,7 +70,7 @@ public class ZapSpell extends TargetedSpell implements TargetedLocationSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && caster instanceof Player) {
 			Block target;
 			try {
@@ -93,7 +95,7 @@ public class ZapSpell extends TargetedSpell implements TargetedLocationSpell {
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		if (!(caster instanceof Player)) return false;
 		Block block = target.getBlock();
 		if (canZap(block)) {
@@ -112,7 +114,7 @@ public class ZapSpell extends TargetedSpell implements TargetedLocationSpell {
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		Block block = target.getBlock();
 		if (canZap(block)) {
 			zap(block, null);

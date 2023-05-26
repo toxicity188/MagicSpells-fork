@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Material;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -76,7 +77,7 @@ public class BowSpell extends Spell implements SingleSpellSupplier {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		return PostCastAction.ALREADY_HANDLED;
 	}
 
@@ -127,7 +128,7 @@ public class BowSpell extends Spell implements SingleSpellSupplier {
 				return;
 			}
 
-			SpellCastEvent evt1 = new SpellCastEvent(thisSpell, shooter, SpellCastState.NORMAL, useBowForce ? event.getForce() : 1.0F, null, thisSpell.cooldown, thisSpell.reagents, 0);
+			SpellCastEvent evt1 = new SpellCastEvent(thisSpell, shooter, SpellCastState.NORMAL, new Power(useBowForce ? event.getForce() : 1.0F), null, thisSpell.cooldown, thisSpell.reagents, 0);
 			EventUtil.call(evt1);
 			if (evt1.isCancelled()) return;
 			

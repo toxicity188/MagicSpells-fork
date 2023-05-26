@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import org.bukkit.entity.Player;
 import org.bukkit.entity.LivingEntity;
 
@@ -32,7 +34,7 @@ public class ResourcePackSpell extends TargetedSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			Player player = (Player) livingEntity;
 			TargetInfo<Player> target = getTargetedPlayer(player, power);

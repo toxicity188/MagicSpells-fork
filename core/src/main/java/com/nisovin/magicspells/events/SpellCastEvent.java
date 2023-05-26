@@ -1,5 +1,6 @@
 package com.nisovin.magicspells.events;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.entity.LivingEntity;
@@ -22,12 +23,12 @@ public class SpellCastEvent extends SpellEvent implements Cancellable {
 	private float cooldown;
 	private SpellReagents reagents;
 	private boolean reagentsChanged;
-	private float power;
+	private Power power;
 	private int castTime;
 	private String[] args;
 	private boolean cancelled = false;
 	
-	public SpellCastEvent(Spell spell, LivingEntity caster, SpellCastState state, float power, String[] args, float cooldown, SpellReagents reagents, int castTime) {
+	public SpellCastEvent(Spell spell, LivingEntity caster, SpellCastState state, Power power, String[] args, float cooldown, SpellReagents reagents, int castTime) {
 		super(spell, caster);
 		this.state = state;
 		this.cooldown = cooldown;
@@ -118,7 +119,7 @@ public class SpellCastEvent extends SpellEvent implements Cancellable {
 	 * Gets the current power level of the spell. Spells start at a power level of 1.0.
 	 * @return the power level
 	 */
-	public float getPower() {
+	public Power getPower() {
 		return power;
 	}
 	
@@ -126,7 +127,7 @@ public class SpellCastEvent extends SpellEvent implements Cancellable {
 	 * Sets the power level for the spell being cast.
 	 * @param power the power level
 	 */
-	public void setPower(float power) {
+	public void setPower(Power power) {
 		this.power = power;
 	}
 	
@@ -134,8 +135,8 @@ public class SpellCastEvent extends SpellEvent implements Cancellable {
 	 * Increases the power lever for the spell being cast by the given multiplier.
 	 * @param power the power level multiplier
 	 */
-	public void increasePower(float power) {
-		this.power *= power;
+	public void increasePower(Power power) {
+		this.power = this.power.multiply(power);
 	}
 	
 	/**

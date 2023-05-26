@@ -3,6 +3,7 @@ package com.nisovin.magicspells.spells.passive;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -32,7 +33,7 @@ public class ShootListener extends PassiveListener {
 		for (PassiveSpell spell : spells) {
 			if (!isCancelStateOk(spell, event.isCancelled())) continue;
 			if (!spellbook.hasSpell(spell)) continue;
-			boolean casted = spell.activate(player, event.getForce());
+			boolean casted = spell.activate(player, new Power(event.getForce()));
 			if (!PassiveListener.cancelDefaultAction(spell, casted)) continue;
 			event.setCancelled(true);
 			event.getProjectile().remove();

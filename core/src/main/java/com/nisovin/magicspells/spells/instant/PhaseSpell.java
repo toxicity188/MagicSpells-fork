@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -43,10 +45,10 @@ public class PhaseSpell extends InstantSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
-			int r = Math.round(range * power);
-			int distance = Math.round(maxDistance * power);
+			int r = Math.round(range * power.intValue());
+			int distance = Math.round(maxDistance * power.intValue());
 			
 			BlockIterator iter;
 			try {

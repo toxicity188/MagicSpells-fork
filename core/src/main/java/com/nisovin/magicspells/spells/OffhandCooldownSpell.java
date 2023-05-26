@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
@@ -67,7 +68,7 @@ public class OffhandCooldownSpell extends InstantSpell implements SingleSpellSup
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			players.add((Player) livingEntity);
 		}

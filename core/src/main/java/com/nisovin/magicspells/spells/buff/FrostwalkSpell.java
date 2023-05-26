@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.HashMap;
@@ -37,7 +39,7 @@ public class FrostwalkSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		frostwalkers.put(entity.getUniqueId(), new BlockPlatform(Material.ICE, Material.WATER, entity.getLocation().getBlock().getRelative(0, -1, 0), size, !leaveFrozen, "square"));
 		return true;
 	}

@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.WeakHashMap;
 import java.util.LinkedHashMap;
 
+import com.nisovin.magicspells.power.Power;
 import com.nisovin.magicspells.util.wrapper.WrappedMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -715,16 +716,16 @@ public abstract class Spell implements Comparable<Spell>, Listener {
 	}
 
 	public final SpellCastResult cast(LivingEntity livingEntity) {
-		return cast(livingEntity, 1.0F, null);
+		return cast(livingEntity, new Power(1), null);
 	}
 
 	// TODO can this safely be made varargs?
 	public final SpellCastResult cast(LivingEntity livingEntity, String[] args) {
-		return cast(livingEntity, 1.0F, args);
+		return cast(livingEntity, new Power(1), args);
 	}
 
 	// TODO can this safely be made varargs?
-	public final SpellCastResult cast(LivingEntity livingEntity, float power, String[] args) {
+	public final SpellCastResult cast(LivingEntity livingEntity, Power power, String[] args) {
 		SpellCastEvent spellCast = preCast(livingEntity, power, args);
 		if (spellCast == null) return new SpellCastResult(SpellCastState.CANT_CAST, PostCastAction.HANDLE_NORMALLY);
 		PostCastAction action;
@@ -754,7 +755,7 @@ public abstract class Spell implements Comparable<Spell>, Listener {
 	// DEBUG INFO: level 2, spell cast state
 	// DEBUG INFO: level 2, spell canceled
 	// DEBUG INFO: level 2, spell cast state changed
-	protected SpellCastEvent preCast(LivingEntity livingEntity, float power, String[] args) {
+	protected SpellCastEvent preCast(LivingEntity livingEntity, Power power, String[] args) {
 		// Get spell state
 		SpellCastState state = getCastState(livingEntity);
 		debug(2, "    Spell cast state: " + state);
@@ -791,7 +792,7 @@ public abstract class Spell implements Comparable<Spell>, Listener {
 		LivingEntity livingEntity = spellCast.getCaster();
 		SpellCastState state = spellCast.getSpellCastState();
 		String[] args = spellCast.getSpellArgs();
-		float power = spellCast.getPower();
+		Power power = spellCast.getPower();
 		debug(3, "    Power: " + power);
 		debug(3, "    Cooldown: " + cooldown);
 		if (MagicSpells.plugin.debug && args != null && args.length > 0) debug(3, "    Args: {" + Util.arrayJoin(args, ',') + '}');
@@ -861,7 +862,7 @@ public abstract class Spell implements Comparable<Spell>, Listener {
 	 * @param args the spell arguments, if cast by command
 	 * @return the action to take after the spell is processed
 	 */
-	public abstract PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args);
+	public abstract PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args);
 
 	public List<String> tabComplete(CommandSender sender, String partial) {
 		return null;
@@ -1237,8 +1238,8 @@ public abstract class Spell implements Comparable<Spell>, Listener {
 		inventory.setContents(items);
 	}*/
 
-	protected int getRange(float power) {
-		return spellPowerAffectsRange ? Math.round(range * power) : range;
+	protected int getRange(Power power) {
+		return spellPowerAffectsRange ? Math.round(range * power.intValue()) : range;
 	}
 
 	/**
@@ -1246,26 +1247,26 @@ public abstract class Spell implements Comparable<Spell>, Listener {
 	 * @param livingEntity the living entity to get the target for
 	 * @return the targeted Player, or null if none was found
 	 */
-	protected TargetInfo<Player> getTargetedPlayer(LivingEntity livingEntity, float power) {
+	protected TargetInfo<Player> getTargetedPlayer(LivingEntity livingEntity, Power power) {
 		TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power, true, null);
 		if (target == null) return null;
 		if (!(target.getTarget() instanceof Player)) return null;
 		return new TargetInfo<>((Player) target.getTarget(), target.getPower());
 	}
 
-	protected TargetInfo<Player> getTargetPlayer(LivingEntity livingEntity, float power) {
+	protected TargetInfo<Player> getTargetPlayer(LivingEntity livingEntity, Power power) {
 		return getTargetedPlayer(livingEntity, power);
 	}
 
-	protected TargetInfo<LivingEntity> getTargetedEntity(LivingEntity livingEntity, float power) {
+	protected TargetInfo<LivingEntity> getTargetedEntity(LivingEntity livingEntity, Power power) {
 		return getTargetedEntity(livingEntity, power, false, null);
 	}
 
-	protected TargetInfo<LivingEntity> getTargetedEntity(LivingEntity livingEntity, float power, ValidTargetChecker checker) {
+	protected TargetInfo<LivingEntity> getTargetedEntity(LivingEntity livingEntity, Power power, ValidTargetChecker checker) {
 		return getTargetedEntity(livingEntity, power, false, checker);
 	}
 
-	protected TargetInfo<LivingEntity> getTargetedEntity(LivingEntity livingEntity, float power, boolean forceTargetPlayers, ValidTargetChecker checker) {
+	protected TargetInfo<LivingEntity> getTargetedEntity(LivingEntity livingEntity, Power power, boolean forceTargetPlayers, ValidTargetChecker checker) {
 		// Get nearby entities
 		// TODO rename to avoid hiding
 		int range = getRange(power);
@@ -1403,12 +1404,12 @@ public abstract class Spell implements Comparable<Spell>, Listener {
 		return null;
 	}
 
-	protected Block getTargetedBlock(LivingEntity entity, float power) {
-		return BlockUtils.getTargetBlock(this, entity, spellPowerAffectsRange ? Math.round(range * power) : range);
+	protected Block getTargetedBlock(LivingEntity entity, Power power) {
+		return BlockUtils.getTargetBlock(this, entity, spellPowerAffectsRange ? Math.round(range * power.intValue()) : range);
 	}
 
-	protected List<Block> getLastTwoTargetedBlocks(LivingEntity entity, float power) {
-		return BlockUtils.getLastTwoTargetBlock(this, entity, spellPowerAffectsRange ? Math.round(range * power) : range);
+	protected List<Block> getLastTwoTargetedBlocks(LivingEntity entity, Power power) {
+		return BlockUtils.getLastTwoTargetBlock(this, entity, spellPowerAffectsRange ? Math.round(range * power.intValue()) : range);
 	}
 
 	public Set<Material> getLosTransparentBlocks() {

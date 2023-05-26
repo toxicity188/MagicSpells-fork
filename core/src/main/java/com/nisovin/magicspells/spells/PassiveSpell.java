@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.LivingEntity;
@@ -166,7 +167,7 @@ public class PassiveSpell extends Spell implements SpellSupplier {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		return PostCastAction.ALREADY_HANDLED;
 	}
 	
@@ -174,23 +175,23 @@ public class PassiveSpell extends Spell implements SpellSupplier {
 		return activate(caster, null, null);
 	}
 	
-	public boolean activate(Player caster, float power) {
+	public boolean activate(Player caster, Power power) {
 		return activate(caster, null, null, power);
 	}
 	
 	public boolean activate(Player caster, LivingEntity target) {
-		return activate(caster, target, null, 1F);
+		return activate(caster, target, null, new Power(1));
 	}
 	
 	public boolean activate(Player caster, Location location) {
-		return activate(caster, null, location, 1F);
+		return activate(caster, null, location, new Power(1));
 	}
 	
 	public boolean activate(final Player caster, final LivingEntity target, final Location location) {
-		return activate(caster, target, location, 1F);
+		return activate(caster, target, location, new Power(1));
 	}
 	
-	public boolean activate(final Player caster, final LivingEntity target, final Location location, final float power) {
+	public boolean activate(final Player caster, final LivingEntity target, final Location location, final Power power) {
 		if (delay < 0) return activateSpells(caster, target, location, power);
 		MagicSpells.scheduleDelayedTask(() -> activateSpells(caster, target, location, power), delay);
 		return false;
@@ -207,7 +208,7 @@ public class PassiveSpell extends Spell implements SpellSupplier {
 	// DEBUG INFO: level 3, target cancelled (UE)
 	// DEBUG INFO: level 3, target cancelled (UL)
 	// DEBUG INFO: level 3, passive spell cancelled
-	private boolean activateSpells(Player caster, LivingEntity target, Location location, float basePower) {
+	private boolean activateSpells(Player caster, LivingEntity target, Location location, Power basePower) {
 		SpellCastState state = getCastState(caster);
 		MagicSpells.debug(3, "Activating passive spell '" + name + "' for player " + caster.getName() + " (state: " + state + ')');
 		if (state != SpellCastState.NORMAL && sendFailureMessages) {
@@ -279,7 +280,7 @@ public class PassiveSpell extends Spell implements SpellSupplier {
 				}
 			} else {
 				MagicSpells.debug(3, "    Casting normally");
-				float power = basePower;
+				Power power = basePower;
 				if (target != null) {
 					SpellTargetEvent targetEvent = new SpellTargetEvent(this, caster, target, power);
 					EventUtil.call(targetEvent);

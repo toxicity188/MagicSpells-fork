@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.List;
@@ -84,7 +86,7 @@ public class LevitateSpell extends TargetedSpell implements TargetedEntitySpell 
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (isLevitating(livingEntity)) {
 			levitating.remove(livingEntity.getUniqueId()).stop();
 			return PostCastAction.ALREADY_HANDLED;
@@ -100,13 +102,13 @@ public class LevitateSpell extends TargetedSpell implements TargetedEntitySpell 
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		levitate(caster, target);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return false;
 	}
 

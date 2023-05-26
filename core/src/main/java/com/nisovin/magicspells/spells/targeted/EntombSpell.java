@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.List;
 import java.util.HashSet;
@@ -66,7 +68,7 @@ public class EntombSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> targetInfo = getTargetedEntity(livingEntity, power);
 			if (targetInfo == null) return noTarget(livingEntity);
@@ -82,7 +84,7 @@ public class EntombSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 	
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		playSpellEffects(caster, target);
 		createTomb(target, power);
@@ -90,14 +92,14 @@ public class EntombSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 	
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(target)) return false;
 		createTomb(target, power);
 		playSpellEffects(EffectPosition.TARGET, target);
 		return true;
 	}
 	
-	private void createTomb(LivingEntity target, float power) {
+	private void createTomb(LivingEntity target, Power power) {
 		List<Block> tempBlocks = new ArrayList<>();
 		List<Block> tombBlocks = new ArrayList<>();
 		
@@ -134,7 +136,7 @@ public class EntombSpell extends TargetedSpell implements TargetedEntitySpell {
 		blocks.addAll(tombBlocks);
 		
 		if (duration > 0 && !tombBlocks.isEmpty()) {
-			MagicSpells.scheduleDelayedTask(() -> removeTomb(tombBlocks), Math.round(duration * power));
+			MagicSpells.scheduleDelayedTask(() -> removeTomb(tombBlocks), Math.round(duration * power.intValue()));
 		}
 	}
 	

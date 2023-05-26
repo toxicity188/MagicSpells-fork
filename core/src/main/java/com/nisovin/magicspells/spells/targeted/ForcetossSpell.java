@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import org.bukkit.util.Vector;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -41,7 +43,7 @@ public class ForcetossSpell extends TargetedSpell implements TargetedEntitySpell
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> targetInfo = getTargetedEntity(livingEntity, power);
 			if (targetInfo == null) return noTarget(livingEntity);
@@ -54,26 +56,26 @@ public class ForcetossSpell extends TargetedSpell implements TargetedEntitySpell
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		toss(caster, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return false;
 	}
 
-	private void toss(LivingEntity livingEntity, LivingEntity target, float power) {
+	private void toss(LivingEntity livingEntity, LivingEntity target, Power power) {
 		if (target == null) return;
 		if (livingEntity == null) return;
 		if (!livingEntity.getLocation().getWorld().equals(target.getLocation().getWorld())) return;
 
-		if (!powerAffectsForce) power = 1f;
+		if (!powerAffectsForce) power = new Power(1);
 
 		if (damage > 0) {
-			double dmg = damage * power;
+			double dmg = damage * power.doubleValue();
 			if (checkPlugins) {
 				MagicSpellsEntityDamageByEntityEvent event = new MagicSpellsEntityDamageByEntityEvent(livingEntity, target, DamageCause.ENTITY_ATTACK, damage);
 				EventUtil.call(event);
@@ -87,7 +89,7 @@ public class ForcetossSpell extends TargetedSpell implements TargetedEntitySpell
 		else v = target.getLocation().toVector().subtract(livingEntity.getLocation().toVector());
 
 		if (v == null) throw new NullPointerException("v");
-		v.setY(0).normalize().multiply(hForce * power).setY(vForce * power);
+		v.setY(0).normalize().multiply(hForce * power.doubleValue()).setY(vForce * power.doubleValue());
 		if (rotation != 0) Util.rotateVector(v, rotation);
 		v = Util.makeFinite(v);
 		if (addVelocityInstead) target.setVelocity(target.getVelocity().add(v));

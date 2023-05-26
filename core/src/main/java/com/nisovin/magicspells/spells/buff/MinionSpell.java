@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.UUID;
@@ -236,7 +238,7 @@ public class MinionSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		if (!(entity instanceof Player)) return true;
 		Player player = (Player) entity;
 		// Selecting the mob
@@ -274,8 +276,8 @@ public class MinionSpell extends BuffSpell {
 		minion.setCustomName(ChatColor.translateAlternateColorCodes('&', minionName.replace("%c", player.getName())));
 		minion.setCustomNameVisible(true);
 		if (powerAffectsHealth) {
-			Util.setMaxHealth(minion, maxHealth * power * powerHealthFactor);
-			minion.setHealth(health * power * powerHealthFactor);
+			Util.setMaxHealth(minion, maxHealth * power.doubleValue() * powerHealthFactor);
+			minion.setHealth(health * power.doubleValue() * powerHealthFactor);
 		} else {
 			Util.setMaxHealth(minion, maxHealth);
 			minion.setHealth(health);
@@ -431,11 +433,11 @@ public class MinionSpell extends BuffSpell {
 
 			if (((LivingEntity) entity).getHealth() - e.getFinalDamage() <= 0 && deathSpell != null) {
 				if (deathSpell.isTargetedLocationSpell()) {
-					deathSpell.castAtLocation(owner, minion.getLocation(), 1);
+					deathSpell.castAtLocation(owner, minion.getLocation(), new Power(1));
 				} else if (deathSpell.isTargetedEntityFromLocationSpell()) {
-					deathSpell.castAtEntityFromLocation(owner, minion.getLocation(), minion, 1);
+					deathSpell.castAtEntityFromLocation(owner, minion.getLocation(), minion, new Power(1));
 				} else if (deathSpell.isTargetedEntitySpell()) {
-					deathSpell.castAtEntity(owner, minion, 1);
+					deathSpell.castAtEntity(owner, minion, new Power(1));
 				}
 			}
 
@@ -495,11 +497,11 @@ public class MinionSpell extends BuffSpell {
 
 			if (attackSpell != null) {
 				if (attackSpell.isTargetedLocationSpell()) {
-					attackSpell.castAtLocation(owner, minion.getLocation(), 1);
+					attackSpell.castAtLocation(owner, minion.getLocation(), new Power(1));
 				} else if (attackSpell.isTargetedEntityFromLocationSpell()) {
-					attackSpell.castAtEntityFromLocation(owner, minion.getLocation(), (LivingEntity) entity, 1);
+					attackSpell.castAtEntityFromLocation(owner, minion.getLocation(), (LivingEntity) entity, new Power(1));
 				} else if (attackSpell.isTargetedEntitySpell()) {
-					attackSpell.castAtEntity(owner, (LivingEntity) entity, 1);
+					attackSpell.castAtEntity(owner, (LivingEntity) entity, new Power(1));
 				}
 			}
 		}

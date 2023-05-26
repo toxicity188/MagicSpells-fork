@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -77,7 +78,7 @@ public final class MultiSpell extends InstantSpell implements SpellSupplier {
 	}
 
 	@Override
-	public Spell.PostCastAction castSpell(LivingEntity livingEntity, Spell.SpellCastState state, float power, String[] args) {
+	public Spell.PostCastAction castSpell(LivingEntity livingEntity, Spell.SpellCastState state, Power power, String[] args) {
 		if (state == Spell.SpellCastState.NORMAL) {
 			if (!castRandomSpellInstead) {
 				int delay = 0;
@@ -232,9 +233,9 @@ public final class MultiSpell extends InstantSpell implements SpellSupplier {
 		
 		private Subspell spell;
 		private UUID casterUUID;
-		private float power;
+		private Power power;
 
-		DelayedSpell(Subspell spell, LivingEntity livingEntity, float power) {
+		DelayedSpell(Subspell spell, LivingEntity livingEntity, Power power) {
 			this.spell = spell;
 			this.casterUUID = livingEntity.getUniqueId();
 			this.power = power;

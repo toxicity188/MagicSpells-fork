@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.nisovin.magicspells.Spell;
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -72,7 +73,7 @@ public final class TargetedMultiSpell extends TargetedSpell implements TargetedE
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Location locTarget = null;
 			LivingEntity entTarget = null;
@@ -114,26 +115,26 @@ public final class TargetedMultiSpell extends TargetedSpell implements TargetedE
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		return runSpells(caster, null, target, power);
 	}
 	
 	@Override
-	public boolean castAtLocation(Location location, float power) {
+	public boolean castAtLocation(Location location, Power power) {
 		return runSpells(null, null, location, power);
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		return runSpells(caster, target, null, power);
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return runSpells(null, target, null, power);
 	}
 	
-	private boolean runSpells(LivingEntity livingEntity, LivingEntity entTarget, Location locTarget, float power) {
+	private boolean runSpells(LivingEntity livingEntity, LivingEntity entTarget, Location locTarget, Power power) {
 		boolean somethingWasDone = false;
 		if (!castRandomSpellInstead) {
 			int delay = 0;
@@ -173,7 +174,7 @@ public final class TargetedMultiSpell extends TargetedSpell implements TargetedE
 		return somethingWasDone;
 	}
 	
-	private boolean castTargetedSpell(Subspell spell, LivingEntity caster, LivingEntity entTarget, Location locTarget, float power) {
+	private boolean castTargetedSpell(Subspell spell, LivingEntity caster, LivingEntity entTarget, Location locTarget, Power power) {
 		boolean success = false;
 		if (spell.isTargetedEntitySpell() && entTarget != null) {
 			success = spell.castAtEntity(caster, entTarget, power);
@@ -228,12 +229,12 @@ public final class TargetedMultiSpell extends TargetedSpell implements TargetedE
 		private LivingEntity caster;
 		private LivingEntity entTarget;
 		private Location locTarget;
-		private float power;
+		private Power power;
 		
 		private List<DelayedSpell> delayedSpells;
 		private boolean cancelled;
 		
-		DelayedSpell(Subspell spell, LivingEntity caster, LivingEntity entTarget, Location locTarget, float power, List<DelayedSpell> delayedSpells) {
+		DelayedSpell(Subspell spell, LivingEntity caster, LivingEntity entTarget, Location locTarget, Power power, List<DelayedSpell> delayedSpells) {
 			this.spell = spell;
 			this.caster = caster;
 			this.entTarget = entTarget;

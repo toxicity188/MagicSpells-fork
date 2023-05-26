@@ -1,5 +1,6 @@
 package com.nisovin.magicspells.events;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.event.HandlerList;
 import org.bukkit.entity.LivingEntity;
 
@@ -20,11 +21,11 @@ public class SpellCastedEvent extends SpellEvent {
     private SpellCastState state;
 	private float cooldown;
 	private SpellReagents reagents;
-	private float power;
+	private Power power;
 	private String[] args;
 	private PostCastAction action;
 	
-	public SpellCastedEvent(Spell spell, LivingEntity caster, SpellCastState state, float power, String[] args, float cooldown, SpellReagents reagents, PostCastAction action) {
+	public SpellCastedEvent(Spell spell, LivingEntity caster, SpellCastState state, Power power, String[] args, float cooldown, SpellReagents reagents, PostCastAction action) {
 		super(spell, caster);
 		this.state = state;
 		this.cooldown = cooldown;
@@ -62,7 +63,7 @@ public class SpellCastedEvent extends SpellEvent {
 	 * Gets the power level of the spell. Spells start at a power level of 1.0.
 	 * @return the power level
 	 */
-	public float getPower() {
+	public Power getPower() {
 		return power;
 	}
 	

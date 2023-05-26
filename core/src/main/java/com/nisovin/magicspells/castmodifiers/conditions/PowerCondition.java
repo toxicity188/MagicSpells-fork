@@ -1,5 +1,6 @@
 package com.nisovin.magicspells.castmodifiers.conditions;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
@@ -12,7 +13,7 @@ import com.nisovin.magicspells.events.MagicSpellsGenericPlayerEvent;
 
 public class PowerCondition extends OperatorCondition implements IModifier {
 
-	private float power;
+	private Power power;
 
 	@Override
 	public boolean setVar(String var) {
@@ -23,7 +24,7 @@ public class PowerCondition extends OperatorCondition implements IModifier {
 		super.setVar(var);
 
 		try {
-			power = Float.parseFloat(var.substring(1));
+			power = new Power(Float.parseFloat(var.substring(1)));
 			return true;
 		} catch (NumberFormatException e) {
 			return false;
@@ -72,10 +73,10 @@ public class PowerCondition extends OperatorCondition implements IModifier {
 		return false;
 	}
 
-	public boolean power(float spellPower) {
-		if (equals) return spellPower == power;
-		else if (moreThan) return spellPower > power;
-		else if (lessThan) return spellPower < power;
+	public boolean power(Power spellPower) {
+		if (equals) return spellPower.floatValue() == power.floatValue();
+		else if (moreThan) return spellPower.floatValue() > power.floatValue();
+		else if (lessThan) return spellPower.floatValue() < power.floatValue();
 		return false;
 	}
 

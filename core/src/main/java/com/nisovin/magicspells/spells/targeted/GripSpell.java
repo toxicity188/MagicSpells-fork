@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 import org.bukkit.entity.LivingEntity;
@@ -36,7 +38,7 @@ public class GripSpell extends TargetedSpell implements TargetedEntitySpell, Tar
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power);
 			if (target == null) return noTarget(livingEntity);
@@ -49,24 +51,24 @@ public class GripSpell extends TargetedSpell implements TargetedEntitySpell, Tar
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		return grip(caster.getLocation(), target);
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return false;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		return grip(from, target);
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(Location from, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(target)) return false;
 		return grip(from, target);
 	}

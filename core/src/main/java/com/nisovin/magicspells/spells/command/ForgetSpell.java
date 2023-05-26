@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.command;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -50,7 +52,7 @@ public class ForgetSpell extends CommandSpell {
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			Player player = (Player) livingEntity;
 			if (args == null || args.length == 0 || args.length > 2) {

@@ -1,5 +1,6 @@
 package com.nisovin.magicspells.spells.targeted.ext;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.LivingEntity;
 
@@ -38,7 +39,7 @@ public class PlaceholderAPIDataSpell extends TargetedSpell {
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && caster instanceof Player) {
 			TargetInfo<Player> targetInfo = getTargetedPlayer(caster, power);
 			if (targetInfo == null) return noTarget(caster);

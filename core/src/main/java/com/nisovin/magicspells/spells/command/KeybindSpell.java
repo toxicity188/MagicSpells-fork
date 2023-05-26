@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.command;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.io.File;
 import java.util.Map;
 import java.util.List;
@@ -86,7 +88,7 @@ public class KeybindSpell extends CommandSpell {
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			Player player = (Player) livingEntity;
 			if (args.length != 1) {

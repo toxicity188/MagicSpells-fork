@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
@@ -218,7 +220,7 @@ public class SpawnMonsterSpell extends TargetedSpell implements TargetedLocation
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Location loc = null;
 			LivingEntity target = null;
@@ -251,7 +253,7 @@ public class SpawnMonsterSpell extends TargetedSpell implements TargetedLocation
 	}
 	
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		if (location.equalsIgnoreCase("target")) spawnMob(caster, caster.getLocation(), target, null, power);
 		else if (location.equalsIgnoreCase("caster")) spawnMob(caster, caster.getLocation(), caster.getLocation(), null, power);
 		else if (location.equalsIgnoreCase("random")) {
@@ -268,7 +270,7 @@ public class SpawnMonsterSpell extends TargetedSpell implements TargetedLocation
 	}
 	
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		if (location.equalsIgnoreCase("target")) spawnMob(null, target, target, null, power);
 		else if (location.equalsIgnoreCase("caster")) spawnMob(null, target, target, null, power);
 		else if (location.equalsIgnoreCase("random")) {
@@ -285,14 +287,14 @@ public class SpawnMonsterSpell extends TargetedSpell implements TargetedLocation
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, Power power) {
 		if (location.equals("focus")) spawnMob(caster, from, from, target, power);
 		else castAtLocation(caster, from, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(Location from, LivingEntity target, Power power) {
 		if (location.equals("focus")) spawnMob(null, from, from, target, power);
 		else castAtLocation(from, power);
 		return true;
@@ -330,7 +332,7 @@ public class SpawnMonsterSpell extends TargetedSpell implements TargetedLocation
 		return null;
 	}
 
-	private void spawnMob(LivingEntity caster, Location source, Location loc, LivingEntity target, float power) {
+	private void spawnMob(LivingEntity caster, Location source, Location loc, LivingEntity target, Power power) {
 		if (entityData == null || entityData.getType() == null) return;
 
 		loc.setYaw((float) (Math.random() * 360));
@@ -428,9 +430,9 @@ public class SpawnMonsterSpell extends TargetedSpell implements TargetedLocation
 		private LivingEntity caster;
 		private LivingEntity monster;
 		private LivingEntity target;
-		private float power;
+		private Power power;
 
-		private AttackMonitor(LivingEntity caster, LivingEntity monster, LivingEntity target, float power) {
+		private AttackMonitor(LivingEntity caster, LivingEntity monster, LivingEntity target, Power power) {
 			this.caster = caster;
 			this.monster = monster;
 			this.target = target;

@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.List;
 import java.util.UUID;
@@ -122,7 +124,7 @@ public class ArmorSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		EntityEquipment inv = entity.getEquipment();
 		if (!replace && ((helmet != null && inv.getHelmet() != null) || (chestplate != null && inv.getChestplate() != null) || (leggings != null && inv.getLeggings() != null) || (boots != null && inv.getBoots() != null))) {
 			// error
@@ -137,7 +139,7 @@ public class ArmorSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean recastBuff(LivingEntity entity, float power, String[] args) {
+	public boolean recastBuff(LivingEntity entity, Power power, String[] args) {
 		return castBuff(entity, power, args);
 	}
 

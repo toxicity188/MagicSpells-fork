@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
@@ -174,7 +176,7 @@ public class ProjectileSpell extends InstantSpell implements TargetedLocationSpe
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			new ProjectileMonitor(livingEntity, livingEntity.getLocation(), power);
 			return PostCastAction.HANDLE_NORMALLY;
@@ -183,13 +185,13 @@ public class ProjectileSpell extends InstantSpell implements TargetedLocationSpe
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		new ProjectileMonitor(caster, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return false;
 	}
 
@@ -290,13 +292,13 @@ public class ProjectileSpell extends InstantSpell implements TargetedLocationSpe
 		private Location startLocation;
 		private LivingEntity caster;
 		private Vector currentVelocity;
-		private float power;
+		private Power power;
 		private long startTime;
 
 		private int taskId;
 		private int counter = 0;
 
-		private ProjectileMonitor(LivingEntity caster, Location startLocation, float power) {
+		private ProjectileMonitor(LivingEntity caster, Location startLocation, Power power) {
 			this.caster = caster;
 			this.power = power;
 			this.startLocation = startLocation;
@@ -318,7 +320,7 @@ public class ProjectileSpell extends InstantSpell implements TargetedLocationSpe
 
 			projectile = startLocation.getWorld().spawn(startLocation, projectileManager.getProjectileClass());
 			currentVelocity = startLocation.getDirection();
-			currentVelocity.multiply(velocity * power);
+			currentVelocity.multiply(velocity * power.doubleValue());
 			if (rotation != 0) Util.rotateVector(currentVelocity, rotation);
 			if (horizSpread > 0 || vertSpread > 0) {
 				float rx = -1 + random.nextFloat() * (1 + 1);

@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.UUID;
 import java.util.List;
@@ -38,7 +40,7 @@ public class DamageEmpowerSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		empowered.add(entity.getUniqueId());
 		return true;
 	}

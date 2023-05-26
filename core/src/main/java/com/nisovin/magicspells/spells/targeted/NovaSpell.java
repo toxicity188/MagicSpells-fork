@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.List;
 import java.util.HashSet;
@@ -111,7 +113,7 @@ public class NovaSpell extends TargetedSpell implements TargetedLocationSpell, T
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState spellCastState, float power, String[] strings) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState spellCastState, Power power, String[] strings) {
 		if (spellCastState == SpellCastState.NORMAL) {
 			Location loc;
 			if (pointBlank) loc = livingEntity.getLocation();
@@ -123,28 +125,28 @@ public class NovaSpell extends TargetedSpell implements TargetedLocationSpell, T
 	}
 	
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity livingEntity, float v) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity livingEntity, Power v) {
 		createNova(caster, livingEntity.getLocation(), v);
 		return false;
 	}
 	
 	@Override
-	public boolean castAtEntity(LivingEntity livingEntity, float v) {
+	public boolean castAtEntity(LivingEntity livingEntity, Power v) {
 		return false;
 	}
 	
 	@Override
-	public boolean castAtLocation(LivingEntity livingEntity, Location location, float v) {
+	public boolean castAtLocation(LivingEntity livingEntity, Location location, Power v) {
 		createNova(livingEntity, location, v);
 		return false;
 	}
 	
 	@Override
-	public boolean castAtLocation(Location location, float v) {
+	public boolean castAtLocation(Location location, Power v) {
 		return false;
 	}
 	
-	private void createNova(LivingEntity livingEntity, Location loc, float power) {
+	private void createNova(LivingEntity livingEntity, Location loc, Power power) {
 		if (material == null) return;
 		// Relative offset
 		Location startLoc = loc.clone();
@@ -174,14 +176,14 @@ public class NovaSpell extends TargetedSpell implements TargetedLocationSpell, T
 		private Set<Block> blocks;
 		private LivingEntity caster;
 		private Block center;
-		private float power;
+		private Power power;
 		private int radiusNova;
 		private int radiusChange;
 		private int taskId;
 		private int count;
 		private int temp;
 
-		private NovaTrackerSquare(List<Player> nearby, Block center, Material mat, LivingEntity caster, int radius, int tickInterval, int activeRadiusChange, float power) {
+		private NovaTrackerSquare(List<Player> nearby, Block center, Material mat, LivingEntity caster, int radius, int tickInterval, int activeRadiusChange, Power power) {
 			this.nearby = nearby;
 			this.center = center;
 			this.matNova = mat;
@@ -270,14 +272,14 @@ public class NovaSpell extends TargetedSpell implements TargetedLocationSpell, T
 		private Set<Block> blocks;
 		private LivingEntity caster;
 		private Block center;
-		private float power;
+		private Power power;
 		private int radiusNova;
 		private int radiusChange;
 		private int taskId;
 		private int count;
 		private int temp;
 
-		private NovaTrackerCircle(List<Player> nearby, Block center, Material mat, LivingEntity caster, int radius, int tickInterval, int activeRadiusChange, float power) {
+		private NovaTrackerCircle(List<Player> nearby, Block center, Material mat, LivingEntity caster, int radius, int tickInterval, int activeRadiusChange, Power power) {
 			this.nearby = nearby;
 			this.center = center;
 			this.matNova = mat;

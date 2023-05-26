@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.HashMap;
@@ -43,7 +45,7 @@ public class CombustSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power);
 			if (target == null) return noTarget(livingEntity);
@@ -57,25 +59,25 @@ public class CombustSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		return combust(caster, target, power);
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(target)) return false;
 		return combust(null, target, power);
 	}
 	
-	private boolean combust(LivingEntity livingEntity, final LivingEntity target, float power) {
+	private boolean combust(LivingEntity livingEntity, final LivingEntity target, Power power) {
 		if (checkPlugins && livingEntity != null) {
 			MagicSpellsEntityDamageByEntityEvent event = new MagicSpellsEntityDamageByEntityEvent(livingEntity, target, DamageCause.ENTITY_ATTACK, 1);
 			EventUtil.call(event);
 			if (event.isCancelled()) return false;
 		}
 		
-		int duration = Math.round(fireTicks * power);
+		int duration = Math.round(fireTicks * power.intValue());
 		combusting.put(target.getUniqueId(), new CombustData(power));
 
 		EventUtil.call(new SpellApplyDamageEvent(this, livingEntity, target, fireTickDamage, DamageCause.FIRE_TICK, ""));
@@ -100,7 +102,7 @@ public class CombustSpell extends TargetedSpell implements TargetedEntitySpell {
 		CombustData data = combusting.get(entity.getUniqueId());
 		if (data == null) return;
 		
-		event.setDamage(Math.round(fireTickDamage * data.power));
+		event.setDamage(Math.round(fireTickDamage * data.power.intValue()));
 		if (preventImmunity) MagicSpells.scheduleDelayedTask(() -> ((LivingEntity) entity).setNoDamageTicks(0), 0);
 	}
 
@@ -110,9 +112,9 @@ public class CombustSpell extends TargetedSpell implements TargetedEntitySpell {
 	
 	private class CombustData {
 		
-		private float power;
+		private Power power;
 		
-		CombustData(float power) {
+		CombustData(Power power) {
 			this.power = power;
 		}
 		

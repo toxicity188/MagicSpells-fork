@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 import org.bukkit.entity.LivingEntity;
@@ -41,7 +43,7 @@ public class OffsetLocationSpell extends TargetedSpell implements TargetedLocati
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Location baseTargetLocation;
 			TargetInfo<LivingEntity> entityTargetInfo = getTargetedEntity(livingEntity, power);
@@ -58,13 +60,13 @@ public class OffsetLocationSpell extends TargetedSpell implements TargetedLocati
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		if (spellToCast != null) spellToCast.castAtLocation(caster, Util.applyOffsets(target, relativeOffset, absoluteOffset), power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return castAtLocation(null, target, power);
 	}
 	

@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Material;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
@@ -86,7 +87,7 @@ public class ArrowSpell extends Spell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		return PostCastAction.ALREADY_HANDLED;
 	}
 
@@ -129,7 +130,7 @@ public class ArrowSpell extends Spell {
 			if (!spellbook.canCast(spell)) return;
 
 			SpellReagents reagents = spell.reagents.clone();
-			SpellCastEvent castEvent = new SpellCastEvent(spell, shooter, SpellCastState.NORMAL, useBowForce ? event.getForce() : 1.0F, null, cooldown, reagents, castTime);
+			SpellCastEvent castEvent = new SpellCastEvent(spell, shooter, SpellCastState.NORMAL, new Power(useBowForce ? event.getForce() : 1.0F), null, cooldown, reagents, castTime);
 			EventUtil.call(castEvent);
 			Entity projectile = event.getProjectile();
 			if (!castEvent.isCancelled()) {
@@ -212,11 +213,11 @@ public class ArrowSpell extends Spell {
 	private static class ArrowSpellData {
 
 		private ArrowSpell spell;
-		private float power;
+		private Power power;
 		private SpellReagents arrowSpellDataReagents;
 		private boolean casted = false;
 
-		ArrowSpellData(ArrowSpell spell, float power, SpellReagents reagents) {
+		ArrowSpellData(ArrowSpell spell, Power power, SpellReagents reagents) {
 			this.spell = spell;
 			this.power = power;
 			arrowSpellDataReagents = reagents;

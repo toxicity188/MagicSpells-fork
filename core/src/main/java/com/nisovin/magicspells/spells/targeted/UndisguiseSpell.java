@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import org.bukkit.entity.Player;
 import org.bukkit.entity.LivingEntity;
 
@@ -26,7 +28,7 @@ public class UndisguiseSpell extends TargetedSpell implements TargetedEntitySpel
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, Power power, String[] args) {
 		if (manager == null) return PostCastAction.ALREADY_HANDLED;
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<Player> target = getTargetPlayer(caster, power);
@@ -40,12 +42,12 @@ public class UndisguiseSpell extends TargetedSpell implements TargetedEntitySpel
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		return target instanceof Player && undisguise(caster, (Player) target);
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return target instanceof Player && undisguise(null, (Player) target);
 	}
 

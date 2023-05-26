@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.io.File;
 import java.util.Map;
 import java.util.UUID;
@@ -139,7 +141,7 @@ public class DisguiseSpell extends TargetedSpell implements TargetedEntitySpell 
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (manager == null || !(livingEntity instanceof Player)) return PostCastAction.ALREADY_HANDLED;
 		if (state == SpellCastState.NORMAL) {
 			Player player = (Player) livingEntity;
@@ -160,14 +162,14 @@ public class DisguiseSpell extends TargetedSpell implements TargetedEntitySpell 
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity player, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity player, LivingEntity target, Power power) {
 		if (!(target instanceof Player)) return false;
 		disguise((Player) target);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		if (!(target instanceof Player)) return false;
 		disguise((Player) target);
 		return true;

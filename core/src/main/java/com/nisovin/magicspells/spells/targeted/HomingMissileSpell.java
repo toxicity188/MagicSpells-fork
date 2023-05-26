@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 
 import com.nisovin.magicspells.Spell;
@@ -159,7 +161,7 @@ public class HomingMissileSpell extends TargetedSpell implements TargetedEntityS
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			ValidTargetChecker checker = hitSpell != null ? hitSpell.getSpell().getValidTargetChecker() : null;
 			TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power, checker);
@@ -172,28 +174,28 @@ public class HomingMissileSpell extends TargetedSpell implements TargetedEntityS
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		new MissileTracker(caster, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(target)) return false;
 		new MissileTracker(null, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		new MissileTracker(caster, from, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(Location from, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(target)) return false;
 		new MissileTracker(null, from, target, power);
 		return true;
@@ -206,20 +208,20 @@ public class HomingMissileSpell extends TargetedSpell implements TargetedEntityS
 		Location currentLocation;
 		Vector currentVelocity;
 		BoundingBox hitBox;
-		float power;
+		Power power;
 		long startTime;
 		int taskId;
 
 		int counter = 0;
 
-		private MissileTracker(LivingEntity caster, LivingEntity target, float power) {
+		private MissileTracker(LivingEntity caster, LivingEntity target, Power power) {
 			currentLocation = caster.getLocation().clone();
 			currentVelocity = currentLocation.getDirection();
 			init(caster, target, power);
 			playSpellEffects(EffectPosition.CASTER, caster);
 		}
 
-		private MissileTracker(LivingEntity caster, Location startLocation, LivingEntity target, float power) {
+		private MissileTracker(LivingEntity caster, Location startLocation, LivingEntity target, Power power) {
 			currentLocation = startLocation.clone();
 			if (Float.isNaN(currentLocation.getPitch())) currentLocation.setPitch(0);
 			currentVelocity = target.getLocation().clone().toVector().subtract(currentLocation.toVector()).normalize();
@@ -229,7 +231,7 @@ public class HomingMissileSpell extends TargetedSpell implements TargetedEntityS
 			else playSpellEffects(EffectPosition.CASTER, startLocation);
 		}
 
-		private void init(LivingEntity caster, LivingEntity target, float power) {
+		private void init(LivingEntity caster, LivingEntity target, Power power) {
 			this.caster = caster;
 			this.target = target;
 			this.power = power;

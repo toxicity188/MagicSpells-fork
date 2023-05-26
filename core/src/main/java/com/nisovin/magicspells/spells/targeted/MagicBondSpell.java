@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -48,7 +50,7 @@ public class MagicBondSpell extends TargetedSpell implements TargetedEntitySpell
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power);
 			if (target == null) return noTarget(livingEntity);
@@ -59,19 +61,19 @@ public class MagicBondSpell extends TargetedSpell implements TargetedEntitySpell
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		bond(caster, target, power);
 		playSpellEffects(caster, target);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		playSpellEffects(EffectPosition.TARGET, target);
 		return true;
 	}
 
-	private void bond(LivingEntity caster, LivingEntity target, float power) {
+	private void bond(LivingEntity caster, LivingEntity target, Power power) {
 		bondTarget.put(caster, target);
 		playSpellEffects(caster, target);
 		SpellMonitor monitorBond = new SpellMonitor(caster, target, power);
@@ -92,9 +94,9 @@ public class MagicBondSpell extends TargetedSpell implements TargetedEntitySpell
 
 		private LivingEntity caster;
 		private LivingEntity target;
-		private float power;
+		private Power power;
 
-		private SpellMonitor(LivingEntity caster, LivingEntity target, float power) {
+		private SpellMonitor(LivingEntity caster, LivingEntity target, Power power) {
 			this.caster = caster;
 			this.target = target;
 			this.power = power;

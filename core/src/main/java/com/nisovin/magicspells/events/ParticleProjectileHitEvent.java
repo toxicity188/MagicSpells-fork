@@ -1,5 +1,6 @@
 package com.nisovin.magicspells.events;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.entity.LivingEntity;
@@ -13,10 +14,10 @@ public class ParticleProjectileHitEvent extends SpellEvent implements Cancellabl
 
 	private LivingEntity target;
 	private ProjectileTracker tracker;
-	private float power;
+	private Power power;
 	private boolean cancelled = false;
 
-	public ParticleProjectileHitEvent(LivingEntity caster, LivingEntity target, ProjectileTracker tracker, Spell spell, float power) {
+	public ParticleProjectileHitEvent(LivingEntity caster, LivingEntity target, ProjectileTracker tracker, Spell spell, Power power) {
 		super(spell, caster);
 
 		this.target = target;
@@ -40,11 +41,11 @@ public class ParticleProjectileHitEvent extends SpellEvent implements Cancellabl
 		this.target = target;
 	}
 
-	public float getPower() {
+	public Power getPower() {
 		return power;
 	}
 
-	public void setPower(float power) {
+	public void setPower(Power power) {
 		this.power = power;
 	}
 

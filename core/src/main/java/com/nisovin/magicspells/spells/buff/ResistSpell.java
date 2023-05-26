@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.List;
@@ -19,7 +21,7 @@ import com.nisovin.magicspells.events.SpellApplyDamageEvent;
 
 public class ResistSpell extends BuffSpell {
 
-	private Map<UUID, Float> buffed;
+	private Map<UUID, Power> buffed;
 
 	private float multiplier;
 
@@ -50,7 +52,7 @@ public class ResistSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		buffed.put(entity.getUniqueId(), power);
 		return true;
 	}
@@ -83,12 +85,12 @@ public class ResistSpell extends BuffSpell {
 
 		LivingEntity entity = event.getTarget();
 
-		float power = multiplier;
-		if (multiplier < 1) power *= 1 / buffed.get(entity.getUniqueId());
-		else if (multiplier > 1) power *= buffed.get(entity.getUniqueId());
+		Power power = new Power(multiplier);
+		if (multiplier < 1) power.multiply(new Power(1 / buffed.get(entity.getUniqueId()).floatValue()));
+		else if (multiplier > 1) power.multiply(buffed.get(entity.getUniqueId()));
 
 		addUseAndChargeCost(entity);
-		event.applyDamageModifier(power);
+		event.applyDamageModifier(power.floatValue());
 	}
 	
 	@EventHandler(ignoreCancelled = true)
@@ -101,8 +103,8 @@ public class ResistSpell extends BuffSpell {
 		if (!isActive((LivingEntity) entity)) return;
 
 		float mult = multiplier;
-		if (multiplier < 1) mult *= 1 / buffed.get(entity.getUniqueId());
-		else if (multiplier > 1) mult *= buffed.get(entity.getUniqueId());
+		if (multiplier < 1) mult *= 1 / buffed.get(entity.getUniqueId()).floatValue();
+		else if (multiplier > 1) mult *= buffed.get(entity.getUniqueId()).floatValue();
 
 		addUseAndChargeCost((LivingEntity) entity);
 		event.setDamage(event.getDamage() * mult);

@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.TreeSet;
 
@@ -68,7 +70,7 @@ public class DowseSpell extends InstantSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			Player player = (Player) livingEntity;
 			int distance = -1;
@@ -83,7 +85,7 @@ public class DowseSpell extends InstantSpell {
 				
 				// Label to exit the search
 				search:
-				for (int r = 1; r <= Math.round(radius * power); r++) {
+				for (int r = 1; r <= Math.round(radius * power.intValue()); r++) {
 					for (int x = -r; x <= r; x++) {
 						for (int y = -r; y <= r; y++) {
 							for (int z = -r; z <= r; z++) {

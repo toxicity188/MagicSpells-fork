@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.command;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.List;
 import java.util.Arrays;
@@ -95,7 +97,7 @@ public class ImbueSpell extends CommandSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			Player player = (Player) livingEntity;
 			if (args == null || args.length == 0) {
@@ -200,7 +202,7 @@ public class ImbueSpell extends CommandSpell {
 			return;
 		}
 
-		spell.castSpell(event.getPlayer(), SpellCastState.NORMAL, 1.0F, MagicSpells.NULL_ARGS);
+		spell.castSpell(event.getPlayer(), SpellCastState.NORMAL,  new Power(1), MagicSpells.NULL_ARGS);
 		uses--;
 		if (uses <= 0) {
 			if (consumeItem) event.getPlayer().getEquipment().setItemInMainHand(null);

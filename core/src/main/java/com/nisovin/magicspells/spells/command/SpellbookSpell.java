@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.command;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.io.File;
 import java.util.List;
 import java.util.Scanner;
@@ -96,7 +98,7 @@ public class SpellbookSpell extends CommandSpell {
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			Player player = (Player) livingEntity;
 			if (args == null || args.length < 1 || args.length > 2 || (args.length == 2 && !RegexUtil.matches(PATTERN_CAST_ARG_USAGE, args[1]))) {
@@ -123,7 +125,7 @@ public class SpellbookSpell extends CommandSpell {
 				return PostCastAction.ALREADY_HANDLED;
 			}
 
-			Block target = getTargetedBlock(player, 10);
+			Block target = getTargetedBlock(player, new Power(10));
 			if (target == null || !spellbookBlock.equals(target.getType())) {
 				sendMessage(strNoTarget, player, args);
 				return PostCastAction.ALREADY_HANDLED;

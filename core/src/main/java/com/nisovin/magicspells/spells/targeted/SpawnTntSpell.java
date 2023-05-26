@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -65,7 +67,7 @@ public class SpawnTntSpell extends TargetedSpell implements TargetedLocationSpel
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			List<Block> blocks = getLastTwoTargetedBlocks(caster, power);
 			if (blocks.size() == 2 && !blocks.get(0).getType().isSolid() && blocks.get(0).getType().isSolid()) {
@@ -77,18 +79,18 @@ public class SpawnTntSpell extends TargetedSpell implements TargetedLocationSpel
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		spawnTnt(caster, power, target.clone().add(0.5, 0.5, 0.5));
 		return true;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		spawnTnt(null, power, target.clone().add(0.5, 0.5, 0.5));
 		return true;
 	}
 
-	private void spawnTnt(LivingEntity caster, float power, Location loc) {
+	private void spawnTnt(LivingEntity caster, Power power, Location loc) {
 		TNTPrimed tnt = loc.getWorld().spawn(loc, TNTPrimed.class);
 
 		if (cancelGravity) tnt.setGravity(false);
@@ -131,9 +133,9 @@ public class SpawnTntSpell extends TargetedSpell implements TargetedLocationSpel
 	private static class TntInfo {
 		
 		private LivingEntity caster;
-		private float power;
+		private Power power;
 		
-		private TntInfo(LivingEntity caster, float power) {
+		private TntInfo(LivingEntity caster, Power power) {
 			this.caster = caster;
 			this.power = power;
 		}

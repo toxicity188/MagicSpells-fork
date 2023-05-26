@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.UUID;
 import java.util.Random;
@@ -40,7 +42,7 @@ public class SeeHealthSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		if (!(entity instanceof Player)) return true;
 		bars.add(entity.getUniqueId());
 		updater = new Updater();
@@ -120,7 +122,7 @@ public class SeeHealthSpell extends BuffSpell {
 				Player player = Bukkit.getPlayer(id);
 				if (player == null) continue;
 				if (!player.isValid()) continue;
-				TargetInfo<LivingEntity> target = getTargetedEntity(player, 1F);
+				TargetInfo<LivingEntity> target = getTargetedEntity(player, new Power(1));
 				if (target != null) showHealthBar(player, target.getTarget());
 			}
 		}

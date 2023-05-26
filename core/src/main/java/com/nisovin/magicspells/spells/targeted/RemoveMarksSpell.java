@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.Iterator;
@@ -52,7 +54,7 @@ public class RemoveMarksSpell extends TargetedSpell implements TargetedLocationS
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Location loc = null;
 			if (pointBlank) loc = livingEntity.getLocation();
@@ -67,19 +69,19 @@ public class RemoveMarksSpell extends TargetedSpell implements TargetedLocationS
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		removeMarks(caster, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		removeMarks(null, target, power);
 		return true;
 	}
 
-	private void removeMarks(LivingEntity caster, Location loc, float power) {
-		float rad = radius * power;
+	private void removeMarks(LivingEntity caster, Location loc, Power power) {
+		float rad = radius * power.floatValue();
 		float radSq = rad * rad;
 
 		Map<UUID, MagicLocation> marks = markSpell.getMarks();

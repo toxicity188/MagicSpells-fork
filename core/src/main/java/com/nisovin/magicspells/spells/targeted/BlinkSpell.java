@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.BlockIterator;
@@ -27,7 +29,7 @@ public class BlinkSpell extends TargetedSpell implements TargetedLocationSpell {
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			int range = getRange(power);
 			if (range <= 0) range = 25;
@@ -92,7 +94,7 @@ public class BlinkSpell extends TargetedSpell implements TargetedLocationSpell {
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		Location location = target.clone();
 		location.setYaw(caster.getLocation().getYaw());
 		location.setPitch(caster.getLocation().getPitch());
@@ -103,7 +105,7 @@ public class BlinkSpell extends TargetedSpell implements TargetedLocationSpell {
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return false;
 	}
 

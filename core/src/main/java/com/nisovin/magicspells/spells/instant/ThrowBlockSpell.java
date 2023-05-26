@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -121,7 +123,7 @@ public class ThrowBlockSpell extends InstantSpell implements TargetedLocationSpe
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Vector v = getVector(livingEntity.getLocation(), power);
 			Location l = livingEntity.getEyeLocation().add(v);
@@ -133,7 +135,7 @@ public class ThrowBlockSpell extends InstantSpell implements TargetedLocationSpe
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		Vector v = getVector(target, power);
 		spawnFallingBlock(caster, power, target.clone().add(0, yOffset, 0), v);
 		playSpellEffects(EffectPosition.CASTER, target);
@@ -141,23 +143,23 @@ public class ThrowBlockSpell extends InstantSpell implements TargetedLocationSpe
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		Vector v = getVector(target, power);
 		spawnFallingBlock(null, power, target.clone().add(0, yOffset, 0), v);
 		playSpellEffects(EffectPosition.CASTER, target);
 		return true;
 	}
 
-	private Vector getVector(Location loc, float power) {
+	private Vector getVector(Location loc, Power power) {
 		Vector v = loc.getDirection();
 		if (verticalAdjustment != 0) v.setY(v.getY() + verticalAdjustment);
 		if (rotationOffset != 0) Util.rotateVector(v, rotationOffset);
 		v.normalize().multiply(velocity);
-		if (applySpellPowerToVelocity) v.multiply(power);
+		if (applySpellPowerToVelocity) v.multiply(power.doubleValue());
 		return v;
 	}
 	
-	private void spawnFallingBlock(LivingEntity livingEntity, float power, Location location, Vector velocity) {
+	private void spawnFallingBlock(LivingEntity livingEntity, Power power, Location location, Vector velocity) {
 		Entity entity = null;
 		FallingBlockInfo info = new FallingBlockInfo(livingEntity, power);
 
@@ -270,7 +272,7 @@ public class ThrowBlockSpell extends InstantSpell implements TargetedLocationSpe
 			else info = fallingBlocks.remove(event.getDamager());
 			if (info == null || !(event.getEntity() instanceof LivingEntity)) return;
 			LivingEntity entity = (LivingEntity) event.getEntity();
-			float power = info.power;
+			Power power = info.power;
 			if (callTargetEvent && info.caster != null) {
 				SpellTargetEvent evt = new SpellTargetEvent(thisSpell, info.caster, entity, power);
 				EventUtil.call(evt);
@@ -280,7 +282,7 @@ public class ThrowBlockSpell extends InstantSpell implements TargetedLocationSpe
 				}
 				power = evt.getPower();
 			}
-			double damage = event.getDamage() * power;
+			double damage = event.getDamage() * power.doubleValue();
 			if (checkPlugins && info.caster != null) {
 				MagicSpellsEntityDamageByEntityEvent evt = new MagicSpellsEntityDamageByEntityEvent(info.caster, entity, DamageCause.ENTITY_ATTACK, damage);
 				EventUtil.call(evt);
@@ -340,10 +342,10 @@ public class ThrowBlockSpell extends InstantSpell implements TargetedLocationSpe
 	private static class FallingBlockInfo {
 		
 		private LivingEntity caster;
-		private float power;
+		private Power power;
 		private boolean spellActivated;
 
-		private FallingBlockInfo(LivingEntity caster, float castPower) {
+		private FallingBlockInfo(LivingEntity caster, Power castPower) {
 			this.caster = caster;
 			power = castPower;
 			spellActivated = false;

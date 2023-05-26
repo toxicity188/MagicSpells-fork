@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffectType;
@@ -31,7 +33,7 @@ public class CrippleSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power);
 			if (target == null) return noTarget(livingEntity);
@@ -44,27 +46,27 @@ public class CrippleSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		cripple(caster, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(target)) return false;
 		cripple(null, target, power);
 		return true;
 	}
 	
-	private void cripple(LivingEntity caster, LivingEntity target, float power) {
+	private void cripple(LivingEntity caster, LivingEntity target, Power power) {
 		if (target == null) return;
 
 		if (caster != null) playSpellEffects(caster, target);
 		else playSpellEffects(EffectPosition.TARGET, target);
 		
-		if (useSlownessEffect) target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Math.round(duration * power), strength), true);
-		if (applyPortalCooldown && target.getPortalCooldown() < (int) (portalCooldown * power)) target.setPortalCooldown((int) (portalCooldown * power));
+		if (useSlownessEffect) target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Math.round(duration * power.intValue()), strength), true);
+		if (applyPortalCooldown && target.getPortalCooldown() < (portalCooldown * power.intValue())) target.setPortalCooldown((portalCooldown * power.intValue()));
 	}
 
 }

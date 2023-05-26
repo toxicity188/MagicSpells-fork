@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.UUID;
 import java.util.HashSet;
@@ -42,7 +44,7 @@ public class InvisibilitySpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		if (!(entity instanceof Player)) return false;
 		makeInvisible(entity);
 		invisibles.add(entity.getUniqueId());
@@ -50,7 +52,7 @@ public class InvisibilitySpell extends BuffSpell {
 	}
 	
 	@Override
-	public boolean recastBuff(LivingEntity entity, float power, String[] args) {
+	public boolean recastBuff(LivingEntity entity, Power power, String[] args) {
 		if (!(entity instanceof Player)) return false;
 		makeInvisible(entity);
 		if (invisibles.contains(entity.getUniqueId())) invisibles.add(entity.getUniqueId());

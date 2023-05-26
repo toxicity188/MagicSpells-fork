@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 
 import org.bukkit.Location;
@@ -47,7 +49,7 @@ public class LightningSpell extends TargetedSpell implements TargetedLocationSpe
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Block target;
 			LivingEntity entityTarget = null;
@@ -64,7 +66,7 @@ public class LightningSpell extends TargetedSpell implements TargetedLocationSpe
 				}
 				if (entityTarget != null) {
 					target = entityTarget.getLocation().getBlock();
-					if (additionalDamage > 0) entityTarget.damage(additionalDamage * power, livingEntity);
+					if (additionalDamage > 0) entityTarget.damage(additionalDamage * power.doubleValue(), livingEntity);
 				} else return noTarget(livingEntity);
 			} else {
 				try {
@@ -94,14 +96,14 @@ public class LightningSpell extends TargetedSpell implements TargetedLocationSpe
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		lightning(target);
 		playSpellEffects(caster, target);
 		return true;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		lightning(target);
 		playSpellEffects(EffectPosition.CASTER, target);
 		return true;

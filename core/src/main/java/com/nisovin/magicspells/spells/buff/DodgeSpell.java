@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.List;
 import java.util.UUID;
@@ -74,7 +76,7 @@ public class DodgeSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		entities.add(entity.getUniqueId());
 		return true;
 	}
@@ -125,14 +127,14 @@ public class DodgeSpell extends BuffSpell {
 		targetLoc.add(v);
 		targetLoc.setDirection(entity.getLocation().getDirection());
 
-		if (entity instanceof Player && spellBeforeDodge != null) spellBeforeDodge.castAtLocation((Player) entity, entityLoc, 1F);
+		if (entity instanceof Player && spellBeforeDodge != null) spellBeforeDodge.castAtLocation(entity, entityLoc, new Power(1));
 
 		if (!BlockUtils.isPathable(targetLoc.getBlock().getType()) || !BlockUtils.isPathable(targetLoc.getBlock().getRelative(BlockFace.UP))) return;
 		entity.teleport(targetLoc);
 		addUseAndChargeCost(entity);
 		playSpellEffectsTrail(entityLoc, targetLoc);
 		playSpellEffects(EffectPosition.DELAYED, targetLoc);
-		if (entity instanceof Player && spellAfterDodge != null) spellAfterDodge.castAtLocation((Player) entity, targetLoc, 1F);
+		if (entity instanceof Player && spellAfterDodge != null) spellAfterDodge.castAtLocation(entity, targetLoc, new Power(1));
 	}
 
 }

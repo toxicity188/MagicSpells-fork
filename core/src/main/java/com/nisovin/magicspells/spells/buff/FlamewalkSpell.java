@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +21,7 @@ import com.nisovin.magicspells.events.MagicSpellsEntityDamageByEntityEvent;
 
 public class FlamewalkSpell extends BuffSpell {
 
-	private Map<UUID, Float> flamewalkers;
+	private Map<UUID, Power> flamewalkers;
 
 	private int radius;
 	private int fireTicks;
@@ -40,7 +42,7 @@ public class FlamewalkSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		flamewalkers.put(entity.getUniqueId(), power);
 		if (burner == null) burner = new Burner();
 		return true;
@@ -94,7 +96,7 @@ public class FlamewalkSpell extends BuffSpell {
 					continue;
 				}
 
-				float power = flamewalkers.get(livingEntity.getUniqueId());
+				Power power = flamewalkers.get(livingEntity.getUniqueId());
 				playSpellEffects(EffectPosition.DELAYED, livingEntity);
 
 				List<Entity> entities = livingEntity.getNearbyEntities(radius, radius, radius);
@@ -108,7 +110,7 @@ public class FlamewalkSpell extends BuffSpell {
 						if (event.isCancelled()) continue;
 					}
 
-					target.setFireTicks(Math.round(fireTicks * power));
+					target.setFireTicks(Math.round(fireTicks * power.intValue()));
 					addUseAndChargeCost(livingEntity);
 					playSpellEffects(EffectPosition.TARGET, target);
 					playSpellEffectsTrail(livingEntity.getLocation(), target.getLocation());

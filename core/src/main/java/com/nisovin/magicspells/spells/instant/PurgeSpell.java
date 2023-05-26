@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +43,7 @@ public class PurgeSpell extends InstantSpell implements TargetedLocationSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			boolean killed = purge(livingEntity.getLocation(), power);
 			if (killed) playSpellEffects(EffectPosition.CASTER, livingEntity);
@@ -51,19 +53,19 @@ public class PurgeSpell extends InstantSpell implements TargetedLocationSpell {
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		boolean killed = purge(target, power);
 		if (killed) playSpellEffects(EffectPosition.CASTER, caster);
 		return killed;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return castAtLocation(null, target, power);
 	}
 
-	private boolean purge(Location loc, float power) {
-		double castingRange = radius * power;
+	private boolean purge(Location loc, Power power) {
+		double castingRange = radius * power.doubleValue();
 		Collection<Entity> entitiesNearby = loc.getWorld().getNearbyEntities(loc, castingRange, castingRange, castingRange);
 		boolean killed = false;
 		for (Entity entity : entitiesNearby) {

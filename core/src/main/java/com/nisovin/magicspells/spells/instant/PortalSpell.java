@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.HashMap;
 
@@ -101,7 +103,7 @@ public class PortalSpell extends InstantSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Location loc = firstMark.getEffectiveMark(livingEntity);
 			Location locSecond;
@@ -242,7 +244,7 @@ public class PortalSpell extends InstantSpell {
 				if (payer == null) return false;
 			}
 
-			SpellTargetEvent event = new SpellTargetEvent(spell, caster, livingEntity, 1);
+			SpellTargetEvent event = new SpellTargetEvent(spell, caster, livingEntity, new Power(1));
 			Bukkit.getPluginManager().callEvent(event);
 			if (payer != null) removeReagents(payer, spell.teleportCost);
 			return true;

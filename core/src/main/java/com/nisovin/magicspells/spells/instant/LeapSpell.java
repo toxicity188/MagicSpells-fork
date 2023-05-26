@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.HashSet;
 
@@ -64,7 +66,7 @@ public class LeapSpell extends InstantSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity player, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity player, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			if (playerMovement) {
 				double x = player.getLocation().getX();
@@ -85,9 +87,9 @@ public class LeapSpell extends InstantSpell {
 
 		return PostCastAction.HANDLE_NORMALLY;
 	}
-	private void leap(LivingEntity player, float power, float rot) {
+	private void leap(LivingEntity player, Power power, float rot) {
 		Vector v = player.getLocation().getDirection();
-		v.setY(0).normalize().multiply(forwardVelocity * power).setY(upwardVelocity * power);
+		v.setY(0).normalize().multiply(forwardVelocity * power.doubleValue()).setY(upwardVelocity * power.doubleValue());
 		if (rot != 0) Util.rotateVector(v, rot);
 		if (clientOnly && player instanceof Player) {
 			MagicSpells.getVolatileCodeHandler().setClientVelocity((Player) player, v);
@@ -105,7 +107,7 @@ public class LeapSpell extends InstantSpell {
 		Player pl = (Player)e.getEntity();
 		if (jumping.isEmpty()) return;
 		if (!jumping.remove(pl)) return;
-		if (landSpell != null) landSpell.cast(pl, 1);
+		if (landSpell != null) landSpell.cast(pl, new Power(1));
 		playSpellEffects(EffectPosition.TARGET, pl.getLocation());
 		if (cancelDamage) e.setCancelled(true);
 	}

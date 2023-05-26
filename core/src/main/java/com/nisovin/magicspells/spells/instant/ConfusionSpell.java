@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +27,7 @@ public class ConfusionSpell extends InstantSpell implements TargetedLocationSpel
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			confuse(livingEntity, livingEntity.getLocation(), power);
 		}
@@ -33,18 +35,18 @@ public class ConfusionSpell extends InstantSpell implements TargetedLocationSpel
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		confuse(caster, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return false;
 	}
 
-	private void confuse(LivingEntity caster, Location location, float power) {
-		double castingRange = Math.round(radius * power);
+	private void confuse(LivingEntity caster, Location location, Power power) {
+		double castingRange = Math.round(radius * power.doubleValue());
 		Collection<Entity> entities = location.getWorld().getNearbyEntities(location, castingRange, castingRange, castingRange);
 		List<LivingEntity> monsters = new ArrayList<>();
 

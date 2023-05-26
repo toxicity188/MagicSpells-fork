@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Collection;
 
 import org.bukkit.Location;
@@ -46,7 +48,7 @@ public class ForcebombSpell extends TargetedSpell implements TargetedLocationSpe
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Block block = getTargetedBlock(livingEntity, power);
 			if (block != null && !BlockUtils.isAir(block.getType())) {
@@ -66,18 +68,18 @@ public class ForcebombSpell extends TargetedSpell implements TargetedLocationSpe
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		knockback(caster, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		knockback(null, target, power);
 		return true;
 	}
 	
-	private void knockback(LivingEntity livingEntity, Location location, float basePower) {
+	private void knockback(LivingEntity livingEntity, Location location, Power basePower) {
 		if (location == null) return;
 		if (location.getWorld() == null) return;
 
@@ -92,7 +94,7 @@ public class ForcebombSpell extends TargetedSpell implements TargetedLocationSpe
 			if (livingEntity != null && !validTargetList.canTarget(livingEntity, entity)) continue;
 			if (entity.getLocation().distanceSquared(location) > radiusSquared) continue;
 
-			float power = basePower;
+			Power power = basePower;
 			if (callTargetEvents && livingEntity != null) {
 				SpellTargetEvent event = new SpellTargetEvent(this, livingEntity, (LivingEntity) entity, power);
 				EventUtil.call(event);
@@ -101,10 +103,10 @@ public class ForcebombSpell extends TargetedSpell implements TargetedLocationSpe
 			}
 
 			e = entity.getLocation().toVector();
-			v = e.subtract(t).normalize().multiply(force * power);
+			v = e.subtract(t).normalize().multiply(force * power.doubleValue());
 
-			if (force != 0) v.setY(v.getY() * (yForce * power));
-			else v.setY(yForce * power);
+			if (force != 0) v.setY(v.getY() * (yForce * power.doubleValue()));
+			else v.setY(yForce * power.doubleValue());
 			if (v.getY() > maxYForce) v.setY(maxYForce);
 
 			v = Util.makeFinite(v);

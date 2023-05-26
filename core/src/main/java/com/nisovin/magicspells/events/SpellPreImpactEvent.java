@@ -2,6 +2,7 @@ package com.nisovin.magicspells.events;
 
 import java.util.Arrays;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.entity.LivingEntity;
@@ -15,12 +16,12 @@ public class SpellPreImpactEvent extends SpellEvent implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
 	private LivingEntity target;
-	private float power;
+	private Power power;
 	private Spell deliverySpell;
 	private boolean redirect;
 	private boolean cancelled;
 
-	public SpellPreImpactEvent(Spell spellPayload, Spell deliverySpell, LivingEntity caster, LivingEntity target, float power) {
+	public SpellPreImpactEvent(Spell spellPayload, Spell deliverySpell, LivingEntity caster, LivingEntity target, Power power) {
 		super(spellPayload, caster);
 		this.target = target;
 		this.power = power;
@@ -51,11 +52,11 @@ public class SpellPreImpactEvent extends SpellEvent implements Cancellable {
 		this.redirect = redirect;
 	}
 	
-	public float getPower() {
+	public Power getPower() {
 		return power;
 	}
 	
-	public void setPower(float power) {
+	public void setPower(Power power) {
 		this.power = power;
 	}
 	

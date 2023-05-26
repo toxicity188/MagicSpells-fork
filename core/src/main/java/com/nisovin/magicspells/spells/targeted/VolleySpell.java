@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -76,7 +78,7 @@ public class VolleySpell extends TargetedSpell implements TargetedLocationSpell,
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			if (noTarget) {
 				volley(caster, caster.getLocation(), null, power);
@@ -96,32 +98,32 @@ public class VolleySpell extends TargetedSpell implements TargetedLocationSpell,
 	}
 	
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		if (noTarget) return false;
 		volley(caster, caster.getLocation(), target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return false;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, Power power) {
 		if (noTarget) return false;
 		volley(caster, from, target.getLocation(), power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(Location from, LivingEntity target, Power power) {
 		if (noTarget) return false;
 		volley(null, from, target.getLocation(), power);
 		return true;
 	}
 
-	private void volley(LivingEntity caster, Location from, Location target, float power) {
+	private void volley(LivingEntity caster, Location from, Location target, Power power) {
 		Location spawn = from.clone().add(0, yOffset, 0);
 		Vector v;
 
@@ -131,10 +133,10 @@ public class VolleySpell extends TargetedSpell implements TargetedLocationSpell,
 		if (shootInterval <= 0) {
 			List<Arrow> arrowList = new ArrayList<>();
 
-			int castingArrows = powerAffectsArrowCount ? Math.round(arrows * power) : arrows;
+			int castingArrows = powerAffectsArrowCount ? Math.round(arrows * power.intValue()) : arrows;
 			for (int i = 0; i < castingArrows; i++) {
 				float speed = this.speed / 10F;
-				if (powerAffectsSpeed) speed *= power;
+				if (powerAffectsSpeed) speed *= power.floatValue();
 				Arrow a = from.getWorld().spawnArrow(spawn, v, speed, spread / 10.0F);
 				a.setVelocity(a.getVelocity());
 				a.setKnockbackStrength(knockbackStrength);
@@ -179,7 +181,7 @@ public class VolleySpell extends TargetedSpell implements TargetedLocationSpell,
 
 		Arrow a = (Arrow) damagerEntity;
 		event.setDamage(damage);
-		SpellPreImpactEvent preImpactEvent = new SpellPreImpactEvent(thisSpell, thisSpell, (LivingEntity) a.getShooter(), (LivingEntity) event.getEntity(), 1);
+		SpellPreImpactEvent preImpactEvent = new SpellPreImpactEvent(thisSpell, thisSpell, (LivingEntity) a.getShooter(), (LivingEntity) event.getEntity(), new Power(1));
 		EventUtil.call(preImpactEvent);
 		if (!preImpactEvent.getRedirected()) return;
 
@@ -199,13 +201,13 @@ public class VolleySpell extends TargetedSpell implements TargetedLocationSpell,
 		private int count;
 		private Map<Integer, Arrow> arrowMap;
 
-		private ArrowShooter(LivingEntity caster, Location spawn, Vector dir, float power) {
+		private ArrowShooter(LivingEntity caster, Location spawn, Vector dir, Power power) {
 			this.caster = caster;
 			this.spawn = spawn;
 			this.dir = dir;
 			this.speedShooter = thisSpell.speed / 10F;
-			this.arrowsShooter = powerAffectsArrowCount ? Math.round(thisSpell.arrows * power) : thisSpell.arrows;
-			if (powerAffectsSpeed) this.speedShooter *= power;
+			this.arrowsShooter = powerAffectsArrowCount ? Math.round(thisSpell.arrows * power.intValue()) : thisSpell.arrows;
+			if (powerAffectsSpeed) this.speedShooter *= power.floatValue();
 			this.count = 0;
 			
 			if (removeDelay > 0) this.arrowMap = new HashMap<>();

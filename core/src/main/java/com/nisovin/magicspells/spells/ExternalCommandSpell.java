@@ -2,6 +2,7 @@ package com.nisovin.magicspells.spells;
 
 import java.util.List;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -105,7 +106,7 @@ public class ExternalCommandSpell extends TargetedSpell implements TargetedEntit
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Player target = null;
 			if (requirePlayerTarget) {
@@ -209,7 +210,7 @@ public class ExternalCommandSpell extends TargetedSpell implements TargetedEntit
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (requirePlayerTarget && target instanceof Player) {
 			process(caster, (Player) target, MagicSpells.NULL_ARGS);
 			return true;
@@ -218,7 +219,7 @@ public class ExternalCommandSpell extends TargetedSpell implements TargetedEntit
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		if (requirePlayerTarget && target instanceof Player) {
 			process(null, (Player) target, MagicSpells.NULL_ARGS);
 			return true;

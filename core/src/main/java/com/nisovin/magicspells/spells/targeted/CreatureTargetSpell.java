@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import com.nisovin.magicspells.Spell;
 import com.nisovin.magicspells.spells.SingleSpellSupplier;
 import org.bukkit.Location;
@@ -42,7 +44,7 @@ public class CreatureTargetSpell extends TargetedSpell implements TargetedEntity
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			castSpells(livingEntity, power);
 		}
@@ -50,30 +52,30 @@ public class CreatureTargetSpell extends TargetedSpell implements TargetedEntity
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		castSpells(caster, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		playSpellEffects(EffectPosition.TARGET, target);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, Power power) {
 		castSpells(caster, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(Location from, LivingEntity target, Power power) {
 		playSpellEffects(from, target);
 		return true;
 	}
 
-	private void castSpells(LivingEntity livingEntity, float power) {
+	private void castSpells(LivingEntity livingEntity, Power power) {
 		if (!(livingEntity instanceof Creature)) return;
 		Creature caster = (Creature) livingEntity;
 		LivingEntity target = caster.getTarget();

@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.List;
@@ -16,7 +18,7 @@ import com.nisovin.magicspells.events.SpellCastEvent;
 
 public class ClaritySpell extends BuffSpell {
 
-	private Map<UUID, Float> buffed;
+	private Map<UUID, Power> buffed;
 
 	private float multiplier;
 	private SpellFilter filter;
@@ -36,7 +38,7 @@ public class ClaritySpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		buffed.put(entity.getUniqueId(), power);
 		return true;
 	}
@@ -63,10 +65,10 @@ public class ClaritySpell extends BuffSpell {
 		if (!filter.check(event.getSpell())) return;
 
 		float mod = multiplier;
-		float power = buffed.get(caster.getUniqueId());
+		Power power = buffed.get(caster.getUniqueId());
 
-		if (multiplier < 1) mod *= 1 / power;
-		else if (multiplier > 1) mod *= power;
+		if (multiplier < 1) mod *= 1 / power.floatValue();
+		else if (multiplier > 1) mod *= power.floatValue();
 
 		SpellReagents reagents = event.getReagents();
 		if (reagents != null) event.setReagents(reagents.multiply(mod));

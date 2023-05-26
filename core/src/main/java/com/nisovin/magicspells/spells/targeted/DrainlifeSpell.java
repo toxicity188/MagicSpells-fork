@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import org.bukkit.World;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -86,7 +88,7 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power);
 			if (target == null) return noTarget(livingEntity);
@@ -100,13 +102,13 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		return drain(caster, target, power);
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return false;
 	}
 	
@@ -115,12 +117,12 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 		return spellDamageType;
 	}
 	
-	private boolean drain(LivingEntity livingEntity, LivingEntity target, float power) {
+	private boolean drain(LivingEntity livingEntity, LivingEntity target, Power power) {
 		if (livingEntity == null) return false;
 		if (target == null) return false;
 
-		double take = takeAmt * power;
-		double give = giveAmt * power;
+		double take = takeAmt * power.doubleValue();
+		double give = giveAmt * power.doubleValue();
 
 		Player pl = null;
 		if (target instanceof Player) pl = (Player) target;
@@ -215,7 +217,7 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 		private int range;
 		private double giveAmtAnimator;
 
-		DrainAnimation(Location start, LivingEntity caster, double giveAmt, float power) {
+		DrainAnimation(Location start, LivingEntity caster, double giveAmt, Power power) {
 			super(animationSpeed, true);
 			
 			this.current = start.toVector();
@@ -236,7 +238,7 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 			if (current.distanceSquared(caster.getLocation().toVector()) < 4 || tick > range * 1.5) {
 				stop();
 				playSpellEffects(EffectPosition.DELAYED, caster);
-				if (spellOnAnimation != null) spellOnAnimation.cast(caster, 1F);
+				if (spellOnAnimation != null) spellOnAnimation.cast(caster, new Power(1));
 				if (!instant) giveToCaster(caster, giveAmtAnimator);
 			}
 		}

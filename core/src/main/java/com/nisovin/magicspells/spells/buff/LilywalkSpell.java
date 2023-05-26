@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.Map;
 import java.util.UUID;
@@ -36,7 +38,7 @@ public class LilywalkSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		Lilies lilies = new Lilies();
 		lilies.move(entity.getLocation().getBlock());
 

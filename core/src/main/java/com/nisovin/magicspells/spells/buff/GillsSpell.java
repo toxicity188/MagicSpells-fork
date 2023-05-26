@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.HashMap;
@@ -46,7 +48,7 @@ public class GillsSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		if (headEffect && headMaterial != null) {
 			EntityEquipment equipment = entity.getEquipment();
 			ItemStack helmet = equipment.getHelmet();

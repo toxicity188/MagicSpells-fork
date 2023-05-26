@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.Map;
 import java.util.UUID;
@@ -19,7 +21,7 @@ import com.nisovin.magicspells.events.SpellPreImpactEvent;
 
 public class ReflectSpell extends BuffSpell {
 
-	private Map<UUID, Float> reflectors;
+	private Map<UUID, Power> reflectors;
 	private Set<String> shieldBreakerNames;
 	private Set<String> delayedReflectionSpells;
 
@@ -45,7 +47,7 @@ public class ReflectSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		reflectors.put(entity.getUniqueId(), power);
 		return true;
 	}
@@ -72,7 +74,7 @@ public class ReflectSpell extends BuffSpell {
 		if (!target.isValid()) return;
 		if (!isActive(target)) return;
 
-		float power = reflectors.get(target.getUniqueId());
+		Power power = reflectors.get(target.getUniqueId());
 		if (shieldBreakerNames != null && shieldBreakerNames.contains(event.getSpell().getInternalName())) {
 			turnOff(target);
 			return;
@@ -87,7 +89,7 @@ public class ReflectSpell extends BuffSpell {
 
 		addUse(target);
 		event.setTarget(event.getCaster());
-		event.setPower(event.getPower() * reflectedSpellPowerMultiplier * (spellPowerAffectsReflectedPower ? power : 1));
+		event.setPower(event.getPower().multiply(new Power(reflectedSpellPowerMultiplier * (spellPowerAffectsReflectedPower ? power.floatValue() : 1))));
 	}
 
 	@EventHandler
@@ -128,9 +130,8 @@ public class ReflectSpell extends BuffSpell {
 
 		addUse(target);
 		event.setRedirected(true);
-		float powerMultiplier = 1.0F;
-		powerMultiplier *= reflectedSpellPowerMultiplier * (spellPowerAffectsReflectedPower ? (reflectors.get(target.getUniqueId()) == null ? 1.0: reflectors.get(target.getUniqueId())) : 1.0);
-		event.setPower(event.getPower() * powerMultiplier);
+		Power powerMultiplier = new Power(reflectedSpellPowerMultiplier * (spellPowerAffectsReflectedPower ? (reflectors.get(target.getUniqueId()) == null ? 1F: reflectors.get(target.getUniqueId())).floatValue() : 1F));
+		event.setPower(event.getPower().multiply(powerMultiplier));
 
 	}
 

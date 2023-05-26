@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -50,7 +52,7 @@ public class ModifyCooldownSpell extends TargetedSpell implements TargetedEntity
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power);
 			if (target == null) return noTarget(livingEntity);
@@ -60,22 +62,22 @@ public class ModifyCooldownSpell extends TargetedSpell implements TargetedEntity
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		modifyCooldowns(target, power);
 		playSpellEffects(caster, target);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		modifyCooldowns(target, power);
 		playSpellEffects(EffectPosition.TARGET, target);
 		return true;
 	}
 
-	private void modifyCooldowns(LivingEntity target, float power) {
-		float sec = seconds * power;
-		float mult = multiplier * (1F / power);
+	private void modifyCooldowns(LivingEntity target, Power power) {
+		float sec = seconds * power.floatValue();
+		float mult = multiplier * (1F / power.floatValue());
 
 		for (Spell spell : spells) {
 			float cd = spell.getCooldown(target);

@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.World;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -131,8 +132,8 @@ public class CastCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                float cPower = 1F;
-                if (args.length == 4) cPower = Float.parseFloat(args[3]);
+                Power cPower = new Power(1F);
+                if (args.length == 4) cPower = new Power(Float.parseFloat(args[3]));
 
                 if (tes != null) {
                     if (target != null) tes.castAtEntity(target, cPower);
@@ -520,7 +521,7 @@ public class CastCommand implements CommandExecutor, TabCompleter {
                         DebugHandler.debugNumberFormat(e);
                     }
                 }
-                ((TargetedLocationSpell) spell).castAtLocation(loc, 1.0F);
+                ((TargetedLocationSpell) spell).castAtLocation(loc, new Power(1));
                 casted = true;
             }
 
@@ -546,7 +547,7 @@ public class CastCommand implements CommandExecutor, TabCompleter {
                         DebugHandler.debugNumberFormat(e);
                     }
                 }
-                ((TargetedLocationSpell) spell).castAtLocation(loc, 1.0F);
+                ((TargetedLocationSpell) spell).castAtLocation(loc, new Power(1.0F));
                 casted = true;
             }
 
@@ -562,8 +563,8 @@ public class CastCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                if (spell instanceof TargetedEntitySpell) ok = ((TargetedEntitySpell) spell).castAtEntity(target, 1.0F);
-                else if (spell instanceof TargetedLocationSpell) ok = ((TargetedLocationSpell) spell).castAtLocation(target.getLocation(), 1.0F);
+                if (spell instanceof TargetedEntitySpell) ok = ((TargetedEntitySpell) spell).castAtEntity(target, new Power(1));
+                else if (spell instanceof TargetedLocationSpell) ok = ((TargetedLocationSpell) spell).castAtLocation(target.getLocation(), new Power(1));
 
                 if (ok) sender.sendMessage(MagicSpells.getTextColor() + "Spell casted!");
                 else sender.sendMessage(MagicSpells.getTextColor() + "Spell failed, probably can't be cast from console.");
@@ -582,7 +583,7 @@ public class CastCommand implements CommandExecutor, TabCompleter {
                 Location loc = new Location(world, Float.parseFloat(locData[1]), Float.parseFloat(locData[2]), Float.parseFloat(locData[3]));
                 if (locData.length > 4) loc.setYaw(Float.parseFloat(locData[4]));
                 if (locData.length > 5) loc.setPitch(Float.parseFloat(locData[5]));
-                ok = ((TargetedLocationSpell) spell).castAtLocation(loc, 1.0F);
+                ok = ((TargetedLocationSpell) spell).castAtLocation(loc, new Power(1));
 
                 if (ok) sender.sendMessage(MagicSpells.getTextColor() + "Spell casted!");
                 else sender.sendMessage(MagicSpells.getTextColor() + "Spell failed, probably can't be cast from console.");

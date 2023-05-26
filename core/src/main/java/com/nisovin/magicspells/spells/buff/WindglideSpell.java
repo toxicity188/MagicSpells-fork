@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.UUID;
 import java.util.HashSet;
@@ -73,7 +75,7 @@ public class WindglideSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		gliders.add(entity.getUniqueId());
 		entity.setGliding(true);
 		return true;
@@ -127,7 +129,7 @@ public class WindglideSpell extends BuffSpell {
 
 		if (blockCollisionDmg) e.setCancelled(true);
 		if (cancelOnCollision) turnOff(livingEntity);
-		if (collisionSpell != null) collisionSpell.castAtLocation(livingEntity, livingEntity.getLocation(), 1F);
+		if (collisionSpell != null) collisionSpell.castAtLocation(livingEntity, livingEntity.getLocation(), new Power(1));
 	}
 
 	private class GlideMonitor implements Runnable {
@@ -149,7 +151,7 @@ public class WindglideSpell extends BuffSpell {
 				Vector v = eLoc.getDirection().normalize().multiply(velocity).add(new Vector(0, height, 0));
 				entity.setVelocity(v);
 
-				if (glideSpell != null) glideSpell.castAtLocation((LivingEntity) entity, eLoc, 1F);
+				if (glideSpell != null) glideSpell.castAtLocation((LivingEntity) entity, eLoc, new Power(1));
 				playSpellEffects(EffectPosition.SPECIAL, eLoc);
 				addUseAndChargeCost((LivingEntity) entity);
 			}

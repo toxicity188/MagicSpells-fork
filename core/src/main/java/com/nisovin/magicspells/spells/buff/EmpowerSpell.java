@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.List;
@@ -16,18 +18,18 @@ import com.nisovin.magicspells.events.SpellCastEvent;
 
 public class EmpowerSpell extends BuffSpell {
 
-	private Map<UUID, Float> empowered;
+	private Map<UUID, Power> empowered;
 
-	private float maxPower;
-	private float extraPower;
+	private Power maxPower;
+	private Power extraPower;
 
 	private SpellFilter filter;
 
 	public EmpowerSpell(MagicConfig config, String spellName) {
 		super(config, spellName);
 
-		maxPower = getConfigFloat("max-power-multiplier", 1.5F);
-		extraPower = getConfigFloat("power-multiplier", 1.5F);
+		maxPower = new Power(getConfigFloat("max-power-multiplier", 1.5F));
+		extraPower = new Power(getConfigFloat("power-multiplier", 1.5F));
 		
 		List<String> spells = getConfigStringList("spells", null);
 		List<String> deniedSpells = getConfigStringList("denied-spells", null);
@@ -39,15 +41,15 @@ public class EmpowerSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
-		float p = power * extraPower;
-		if (p > maxPower) p = maxPower;
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
+		Power p = power.multiply(extraPower);
+		if (p.floatValue() > maxPower.floatValue()) p = maxPower;
 		empowered.put(entity.getUniqueId(), p);
 		return true;
 	}
 
 	@Override
-	public boolean recastBuff(LivingEntity entity, float power, String[] args) {
+	public boolean recastBuff(LivingEntity entity, Power power, String[] args) {
 		return castBuff(entity, power, args);
 	}
 

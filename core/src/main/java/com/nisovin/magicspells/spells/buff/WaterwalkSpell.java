@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.UUID;
 import java.util.HashSet;
@@ -35,7 +37,7 @@ public class WaterwalkSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		if (!(entity instanceof Player)) return true;
 		waterwalking.add(entity.getUniqueId());
 		startTicker();

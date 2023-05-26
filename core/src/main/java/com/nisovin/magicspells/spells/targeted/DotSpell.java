@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.HashMap;
@@ -52,7 +54,7 @@ public class DotSpell extends TargetedSpell implements TargetedEntitySpell, Spel
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> targetInfo = getTargetedEntity(livingEntity, power);
 			if (targetInfo == null) return noTarget(livingEntity);
@@ -62,13 +64,13 @@ public class DotSpell extends TargetedSpell implements TargetedEntitySpell, Spel
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		applyDot(caster, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		applyDot(null, target, power);
 		return true;
 	}
@@ -88,7 +90,7 @@ public class DotSpell extends TargetedSpell implements TargetedEntitySpell, Spel
 		dot.cancel();
 	}
 	
-	private void applyDot(LivingEntity caster, LivingEntity target, float power) {
+	private void applyDot(LivingEntity caster, LivingEntity target, Power power) {
 		Dot dot = activeDots.get(target.getUniqueId());
 		if (dot != null) {
 			dot.dur = 0;
@@ -112,14 +114,14 @@ public class DotSpell extends TargetedSpell implements TargetedEntitySpell, Spel
 		
 		private LivingEntity caster;
 		private LivingEntity target;
-		private float power;
+		private Power power;
 
 		private int taskId;
 		private int dur = 0;
 
 
 		private int limit;
-		private Dot(LivingEntity caster, LivingEntity target, float power) {
+		private Dot(LivingEntity caster, LivingEntity target, Power power) {
 			SpellApplyDotEvent event = new SpellApplyDotEvent(DotSpell.this,caster,target,damage,delay,interval,duration);
 			EventUtil.call(event);
 			this.caster = caster;
@@ -142,7 +144,7 @@ public class DotSpell extends TargetedSpell implements TargetedEntitySpell, Spel
 				return;
 			}
 
-			double dam = damage * power;
+			double dam = damage * power.doubleValue();
 			SpellApplyDamageEvent event = new SpellApplyDamageEvent(DotSpell.this, caster, target, dam, DamageCause.MAGIC, spellDamageType);
 			EventUtil.call(event);
 			dam = event.getFinalDamage();

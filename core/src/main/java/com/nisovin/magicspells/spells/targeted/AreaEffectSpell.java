@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -93,7 +95,7 @@ public class AreaEffectSpell extends TargetedSpell implements TargetedLocationSp
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Location loc = null;
 			if (pointBlank) loc = livingEntity.getLocation();
@@ -126,16 +128,16 @@ public class AreaEffectSpell extends TargetedSpell implements TargetedLocationSp
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		return doAoe(caster, target, power);
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return doAoe(null, target, power);
 	}
 	
-	private boolean doAoe(LivingEntity livingEntity, Location location, float basePower) {
+	private boolean doAoe(LivingEntity livingEntity, Location location, Power basePower) {
 		int count = 0;
 
 		Vector vLoc = livingEntity != null ? livingEntity.getLocation().toVector() : location.toVector();
@@ -154,7 +156,7 @@ public class AreaEffectSpell extends TargetedSpell implements TargetedLocationSp
 			}
 
 			LivingEntity target = (LivingEntity) e;
-			float power = basePower;
+			Power power = basePower;
 
 			if (target.isDead()) continue;
 			if (livingEntity == null && !validTargetList.canTarget(target)) continue;

@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.command;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -119,7 +121,7 @@ public class ScrollSpell extends CommandSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			Player player = (Player) livingEntity;
 			if (args == null || args.length == 0) {
@@ -238,7 +240,7 @@ public class ScrollSpell extends CommandSpell {
 		PostCastAction action;
 		if (bypassNormalChecks) {
 			state = SpellCastState.NORMAL;
-			action = spell.castSpell(player, SpellCastState.NORMAL, 1.0F, null);
+			action = spell.castSpell(player, SpellCastState.NORMAL, new Power(1), null);
 		} else {
 			SpellCastResult result = spell.cast(player);
 			state = result.state;

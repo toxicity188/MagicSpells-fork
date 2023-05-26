@@ -3,6 +3,7 @@ package com.nisovin.magicspells.spells;
 import java.util.*;
 
 import com.nisovin.magicspells.Spell;
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -167,7 +168,7 @@ public abstract class BuffSpell extends TargetedSpell implements TargetedEntityS
 	}
 
 	@Override
-	public final PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public final PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		LivingEntity target;
 
 		if (targeted) {
@@ -191,16 +192,16 @@ public abstract class BuffSpell extends TargetedSpell implements TargetedEntityS
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		return activate(caster, target, power, MagicSpells.NULL_ARGS, true) == PostCastAction.HANDLE_NORMALLY;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return activate(null, target, power, MagicSpells.NULL_ARGS, true) == PostCastAction.HANDLE_NORMALLY;
 	}
 
-	private PostCastAction activate(LivingEntity caster, LivingEntity target, float power, String[] args, boolean normal) {
+	private PostCastAction activate(LivingEntity caster, LivingEntity target, Power power, String[] args, boolean normal) {
 		if (isActive(target) && toggle) {
 			turnOff(target);
 			return PostCastAction.ALREADY_HANDLED;
@@ -220,9 +221,9 @@ public abstract class BuffSpell extends TargetedSpell implements TargetedEntityS
 		return PostCastAction.HANDLE_NORMALLY;
 	}
 
-	public abstract boolean castBuff(LivingEntity entity, float power, String[] args);
+	public abstract boolean castBuff(LivingEntity entity, Power power, String[] args);
 
-	public boolean recastBuff(LivingEntity entity, float power, String[] args) {
+	public boolean recastBuff(LivingEntity entity, Power power, String[] args) {
 		stopEffects();
 		return true;
 	}
@@ -237,11 +238,11 @@ public abstract class BuffSpell extends TargetedSpell implements TargetedEntityS
 	 * Begins counting the spell duration for a player
 	 * @param livingEntity the player to begin counting duration
 	 */
-	private void startSpellDuration(final LivingEntity livingEntity, float power) {
+	private void startSpellDuration(final LivingEntity livingEntity, Power power) {
 		if (duration > 0 && durationEndTime != null) {
 
 			float dur = duration;
-			if (powerAffectsDuration) dur *= power;
+			if (powerAffectsDuration) dur *= power.intValue();
 			durationEndTime.put(livingEntity, System.currentTimeMillis() + Math.round(dur * TimeUtil.MILLISECONDS_PER_SECOND));
 
 			MagicSpells.scheduleDelayedTask(() -> {
@@ -288,7 +289,7 @@ public abstract class BuffSpell extends TargetedSpell implements TargetedEntityS
 	 */
 	protected int addUse(LivingEntity entity) {
 		// Run spell on use increment first thing in case we want to intervene
-		if (spellOnUseIncrement != null && entity instanceof Player) spellOnUseIncrement.cast((Player) entity, 1f);
+		if (spellOnUseIncrement != null && entity instanceof Player) spellOnUseIncrement.cast((Player) entity, new Power(1));
 
 		if (numUses > 0 || (reagents != null && useCostInterval > 0)) {
 
@@ -314,7 +315,7 @@ public abstract class BuffSpell extends TargetedSpell implements TargetedEntityS
 	 */
 	protected boolean chargeUseCost(LivingEntity entity) {
 		// Run spell on cost first thing to dodge the early returns and allow intervention
-		if (spellOnCost != null) spellOnCost.cast(entity, 1f);
+		if (spellOnCost != null) spellOnCost.cast(entity, new Power(1));
 
 		if (reagents == null) return true;
 		if (useCostInterval <= 0) return true;
@@ -369,7 +370,7 @@ public abstract class BuffSpell extends TargetedSpell implements TargetedEntityS
 
 		if (!(entity instanceof Player)) return;
 		sendMessage(strFade, entity, null);
-		if (spellOnEnd != null) spellOnEnd.cast(entity, 1f);
+		if (spellOnEnd != null) spellOnEnd.cast(entity, new Power(1));
 	}
 
 	public void stopEffects() {

@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.HashMap;
@@ -68,7 +70,7 @@ public class HoldRightSpell extends TargetedSpell implements TargetedEntitySpell
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			CastData data = casting.get(livingEntity.getUniqueId());
 			if (data != null && data.isValid(livingEntity)) {
@@ -95,7 +97,7 @@ public class HoldRightSpell extends TargetedSpell implements TargetedEntitySpell
 	}
 	
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		if (!targetLocation) return false;
 		CastData data = casting.get(caster.getUniqueId());
 		if (data != null && data.isValid(caster)) {
@@ -109,12 +111,12 @@ public class HoldRightSpell extends TargetedSpell implements TargetedEntitySpell
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return false;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!targetEntity) return false;
 		CastData data = casting.get(caster.getUniqueId());
 		if (data != null && data.isValid(caster)) {
@@ -128,7 +130,7 @@ public class HoldRightSpell extends TargetedSpell implements TargetedEntitySpell
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return false;
 	}
 	
@@ -137,22 +139,22 @@ public class HoldRightSpell extends TargetedSpell implements TargetedEntitySpell
 		private Location targetLocation = null;
 		private LivingEntity targetEntity = null;
 
-		private float power;
+		private Power power;
 
 		private long start = System.currentTimeMillis();
 		private long lastCast = 0;
 		
-		private CastData(LivingEntity target, float power) {
+		private CastData(LivingEntity target, Power power) {
 			targetEntity = target;
 			this.power = power;
 		}
 
-		private CastData(Location target, float power) {
+		private CastData(Location target, Power power) {
 			targetLocation = target;
 			this.power = power;
 		}
 
-		private CastData(float power) {
+		private CastData(Power power) {
 			this.power = power;
 		}
 

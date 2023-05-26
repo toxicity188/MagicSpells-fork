@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.nisovin.magicspells.Spell;
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -122,7 +123,7 @@ public abstract class TargetedSpell extends InstantSpell {
 	}
 	
 	@Override
-	protected TargetInfo<LivingEntity> getTargetedEntity(LivingEntity livingEntity, float power, boolean forceTargetPlayers, ValidTargetChecker checker) {
+	protected TargetInfo<LivingEntity> getTargetedEntity(LivingEntity livingEntity, Power power, boolean forceTargetPlayers, ValidTargetChecker checker) {
 		if (targetSelf || validTargetList.canTargetSelf()) return new TargetInfo<>(livingEntity, power);
 		return super.getTargetedEntity(livingEntity, power, forceTargetPlayers, checker);
 	}
@@ -147,7 +148,7 @@ public abstract class TargetedSpell extends InstantSpell {
 	protected PostCastAction noTarget(LivingEntity livingEntity, String message) {
 		fizzle(livingEntity);
 		sendMessage(message, livingEntity, MagicSpells.NULL_ARGS);
-		if (spellOnFail != null) spellOnFail.cast(livingEntity, 1.0F);
+		if (spellOnFail != null) spellOnFail.cast(livingEntity, new Power(1));
 		return alwaysActivate ? PostCastAction.NO_MESSAGES : PostCastAction.ALREADY_HANDLED;
 	}
 	

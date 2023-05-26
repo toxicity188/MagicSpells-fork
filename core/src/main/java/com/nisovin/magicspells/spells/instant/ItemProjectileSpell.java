@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -134,7 +136,7 @@ public class ItemProjectileSpell extends InstantSpell implements TargetedLocatio
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			new ItemProjectile(livingEntity, livingEntity.getLocation(), power);
 		}
@@ -142,13 +144,13 @@ public class ItemProjectileSpell extends InstantSpell implements TargetedLocatio
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity livingEntity, Location target, float power) {
+	public boolean castAtLocation(LivingEntity livingEntity, Location target, Power power) {
 		new ItemProjectile(livingEntity, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return false;
 	}
 
@@ -159,7 +161,7 @@ public class ItemProjectileSpell extends InstantSpell implements TargetedLocatio
 		private Vector velocity;
 		private Location startLocation;
 		private Location currentLocation;
-		private float power;
+		private Power power;
 
 		private boolean landed = false;
 		private boolean groundSpellCasted = false;
@@ -167,7 +169,7 @@ public class ItemProjectileSpell extends InstantSpell implements TargetedLocatio
 		private int taskId;
 		private int count = 0;
 
-		private ItemProjectile(LivingEntity caster, Location from, float power) {
+		private ItemProjectile(LivingEntity caster, Location from, Power power) {
 			this.caster = caster;
 			this.power = power;
 

@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.UUID;
@@ -70,7 +72,7 @@ public class SilenceSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power);
 			if (target == null) return noTarget(livingEntity);
@@ -84,23 +86,23 @@ public class SilenceSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		silence(target, power);
 		playSpellEffects(caster, target);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		silence(target, power);
 		playSpellEffects(EffectPosition.TARGET, target);
 		return true;
 	}
 
-	private void silence(LivingEntity target, float power) {
+	private void silence(LivingEntity target, Power power) {
 		Unsilencer u = silenced.get(target.getUniqueId());
 		if (u != null) u.cancel();
-		silenced.put(target.getUniqueId(), new Unsilencer(target, Math.round(duration * power)));
+		silenced.put(target.getUniqueId(), new Unsilencer(target, Math.round(duration * power.intValue())));
 	}
 
 	public boolean isSilenced(LivingEntity target) {

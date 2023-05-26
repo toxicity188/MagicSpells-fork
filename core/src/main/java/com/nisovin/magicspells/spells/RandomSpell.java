@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.LivingEntity;
 
@@ -58,7 +59,7 @@ public class RandomSpell extends InstantSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			RandomOptionSet set = options;
 			if (checkIndividualCooldowns || checkIndividualModifiers) {

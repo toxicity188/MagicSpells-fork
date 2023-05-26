@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -45,7 +47,7 @@ public class TransmuteSpell extends TargetedSpell implements TargetedLocationSpe
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Block block = getTargetedBlock(caster, power);
 			if (block == null) return noTarget(caster);
@@ -64,7 +66,7 @@ public class TransmuteSpell extends TargetedSpell implements TargetedLocationSpe
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		Block block = target.getBlock();
 		if (canTransmute(block)) {
 			block.setType(transmuteType);
@@ -83,7 +85,7 @@ public class TransmuteSpell extends TargetedSpell implements TargetedLocationSpe
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		Block block = target.getBlock();
 		if (canTransmute(block)) {
 			block.setType(transmuteType);

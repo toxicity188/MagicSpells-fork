@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -59,7 +61,7 @@ public class ChainSpell extends TargetedSpell implements TargetedEntitySpell, Ta
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power);
 			if (target == null) return noTarget(livingEntity);
@@ -71,32 +73,32 @@ public class ChainSpell extends TargetedSpell implements TargetedEntitySpell, Ta
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		chain(caster, caster.getLocation(), target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		chain(null, null, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, Power power) {
 		chain(caster, from, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(Location from, LivingEntity target, Power power) {
 		chain(null, from, target, power);
 		return true;
 	}
 
-	private void chain(LivingEntity livingEntity, Location start, LivingEntity target, float power) {
+	private void chain(LivingEntity livingEntity, Location start, LivingEntity target, Power power) {
 		List<LivingEntity> targets = new ArrayList<>();
-		List<Float> targetPowers = new ArrayList<>();
+		List<Power> targetPowers = new ArrayList<>();
 		targets.add(target);
 		targetPowers.add(power);
 
@@ -111,7 +113,7 @@ public class ChainSpell extends TargetedSpell implements TargetedEntitySpell, Ta
 
 				if (!validTargetList.canTarget(livingEntity, target)) continue;
 
-				float thisPower = power;
+				Power thisPower = power;
 				if (livingEntity != null) {
 					SpellTargetEvent event = new SpellTargetEvent(this, livingEntity, (LivingEntity) e, thisPower);
 					EventUtil.call(event);
@@ -144,7 +146,7 @@ public class ChainSpell extends TargetedSpell implements TargetedEntitySpell, Ta
 		} else new ChainBouncer(livingEntity, start, targets, power);
 	}
 
-	private boolean castSpellAt(LivingEntity caster, Location from, LivingEntity target, float power) {
+	private boolean castSpellAt(LivingEntity caster, Location from, LivingEntity target, Power power) {
 		if (spellToCast.isTargetedEntityFromLocationSpell() && from != null) return spellToCast.castAtEntityFromLocation(caster, from, target, power);
 		if (spellToCast.isTargetedEntitySpell()) return spellToCast.castAtEntity(caster, target, power);
 		if (spellToCast.isTargetedLocationSpell()) return spellToCast.castAtLocation(caster, target.getLocation(), power);
@@ -156,11 +158,11 @@ public class ChainSpell extends TargetedSpell implements TargetedEntitySpell, Ta
 		private LivingEntity caster;
 		private Location start;
 		private List<LivingEntity> targets;
-		private float power;
+		private Power power;
 		private int current = 0;
 		private int taskId;
 
-		private ChainBouncer(LivingEntity caster, Location start, List<LivingEntity> targets, float power) {
+		private ChainBouncer(LivingEntity caster, Location start, List<LivingEntity> targets, Power power) {
 			this.caster = caster;
 			this.start = start;
 			this.targets = targets;

@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -38,7 +40,7 @@ public class ExplodeSpell extends TargetedSpell implements TargetedLocationSpell
 	private boolean preventAnimalDamage;
 
 	private long currentTick = 0;
-	private float currentPower = 0;
+	private Power currentPower = new Power(0);
 	
 	public ExplodeSpell(MagicConfig config, String spellName) {
 		super(config, spellName);
@@ -57,7 +59,7 @@ public class ExplodeSpell extends TargetedSpell implements TargetedLocationSpell
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Block target;
 			try {
@@ -84,9 +86,9 @@ public class ExplodeSpell extends TargetedSpell implements TargetedLocationSpell
 		return PostCastAction.HANDLE_NORMALLY;
 	}
 	
-	private boolean explode(LivingEntity livingEntity, Location target, float power) {
+	private boolean explode(LivingEntity livingEntity, Location target, Power power) {
 		if (simulateTnt) {
-			boolean cancelled = MagicSpells.getVolatileCodeHandler().simulateTnt(target, livingEntity, explosionSize * power, addFire);
+			boolean cancelled = MagicSpells.getVolatileCodeHandler().simulateTnt(target, livingEntity, explosionSize * power.intValue(), addFire);
 			if (cancelled) return false;
 		}
 
@@ -100,19 +102,19 @@ public class ExplodeSpell extends TargetedSpell implements TargetedLocationSpell
 
 		boolean ret = false;
 		if (livingEntity instanceof Player) {
-			ret = MagicSpells.getVolatileCodeHandler().createExplosionByPlayer((Player) livingEntity, target, explosionSize * power, addFire, !preventBlockDamage);
+			ret = MagicSpells.getVolatileCodeHandler().createExplosionByPlayer((Player) livingEntity, target, explosionSize * power.intValue(), addFire, !preventBlockDamage);
 		}
 		if (ret) playSpellEffects(livingEntity, target);
 		return ret;
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		return explode(caster, target, power);
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return false;
 	}
 
@@ -124,7 +126,7 @@ public class ExplodeSpell extends TargetedSpell implements TargetedLocationSpell
 
 		if (preventPlayerDamage && event.getEntity() instanceof Player) event.setCancelled(true);
 		else if (preventAnimalDamage && event.getEntity() instanceof Animals) event.setCancelled(true);
-		else if (damageMultiplier > 0) event.setDamage(Math.round(event.getDamage() * damageMultiplier * currentPower));
+		else if (damageMultiplier > 0) event.setDamage(Math.round(event.getDamage() * damageMultiplier * currentPower.doubleValue()));
 	}
 	
 	@EventHandler

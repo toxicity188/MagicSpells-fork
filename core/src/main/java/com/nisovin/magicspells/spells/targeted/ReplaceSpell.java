@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.Random;
@@ -101,7 +103,7 @@ public class ReplaceSpell extends TargetedSpell implements TargetedLocationSpell
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			Block target = pointBlank ? livingEntity.getLocation().getBlock() : getTargetedBlock(livingEntity, power);
 			if (target == null) return noTarget(livingEntity);
@@ -111,22 +113,22 @@ public class ReplaceSpell extends TargetedSpell implements TargetedLocationSpell
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		return replace(caster, target, power);
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return replace(null, target, power);
 	}
 
-	private boolean replace(LivingEntity caster, Location target, float power) {
+	private boolean replace(LivingEntity caster, Location target, Power power) {
 		boolean replaced = false;
 		Block block;
 
-		int d = powerAffectsRadius ? Math.round(radiusDown * power) : radiusDown;
-		int u = powerAffectsRadius ? Math.round(radiusUp * power) : radiusUp;
-		int h = powerAffectsRadius ? Math.round(radiusHoriz * power) : radiusHoriz;
+		int d = powerAffectsRadius ? Math.round(radiusDown * power.intValue()) : radiusDown;
+		int u = powerAffectsRadius ? Math.round(radiusUp * power.intValue()) : radiusUp;
+		int h = powerAffectsRadius ? Math.round(radiusHoriz * power.intValue()) : radiusHoriz;
 
 		for (int y = target.getBlockY() - d + yOffset; y <= target.getBlockY() + u + yOffset; y++) {
 			for (int x = target.getBlockX() - h; x <= target.getBlockX() + h; x++) {

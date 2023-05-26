@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +18,7 @@ import com.nisovin.magicspells.events.SpellCastEvent;
 
 public class SpellHasteSpell extends BuffSpell {
 
-	private Map<UUID, Float> spellTimers;
+	private Map<UUID, Power> spellTimers;
 
 	private float castTimeModAmt;
 	private float cooldownModAmt;
@@ -40,7 +42,7 @@ public class SpellHasteSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		spellTimers.put(entity.getUniqueId(), power);
 		return true;
 	}
@@ -65,19 +67,19 @@ public class SpellHasteSpell extends BuffSpell {
 		if (!filter.check(event.getSpell())) return;
 		if (!isActive(event.getCaster())) return;
 		
-		Float power = spellTimers.get(event.getCaster().getUniqueId());
+		Power power = spellTimers.get(event.getCaster().getUniqueId());
 		if (power == null) return;
 
 		if (castTimeModAmt != 0) {
 			int ct = event.getCastTime();
-			float newCT = ct + (castTimeModAmt * power * ct);
+			float newCT = ct + (castTimeModAmt * power.floatValue() * ct);
 			if (newCT < 0) newCT = 0;
 			event.setCastTime(Math.round(newCT));
 		}
 
 		if (cooldownModAmt != 0) {
 			float cd = event.getCooldown();
-			float newCD = cd + (cooldownModAmt * power * cd);
+			float newCD = cd + (cooldownModAmt * power.floatValue() * cd);
 			if (newCD < 0) newCD = 0;
 			event.setCooldown(newCD);
 		}

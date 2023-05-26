@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -67,7 +69,7 @@ public class GeyserSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power);
 			if (target == null) return noTarget(livingEntity);
@@ -82,8 +84,8 @@ public class GeyserSpell extends TargetedSpell implements TargetedEntitySpell {
 		return PostCastAction.HANDLE_NORMALLY;
 	}
 	
-	private boolean geyser(LivingEntity caster, LivingEntity target, float power) {
-		double dam = damage * power;
+	private boolean geyser(LivingEntity caster, LivingEntity target, Power power) {
+		double dam = damage * power.doubleValue();
 		
 		if (caster != null && checkPlugins && damage > 0) {
 			MagicSpellsEntityDamageByEntityEvent event = new MagicSpellsEntityDamageByEntityEvent(caster, target, DamageCause.ENTITY_ATTACK, dam);
@@ -104,7 +106,7 @@ public class GeyserSpell extends TargetedSpell implements TargetedEntitySpell {
 			}
 		}
 		
-		if (velocity > 0) target.setVelocity(new Vector(0, velocity * power, 0));
+		if (velocity > 0) target.setVelocity(new Vector(0, velocity * power.doubleValue(), 0));
 		
 		if (geyserHeight > 0) {
 			List<Entity> allNearby = target.getNearbyEntities(50, 50, 50);
@@ -121,7 +123,7 @@ public class GeyserSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		geyser(caster, target, power);
 		playSpellEffects(caster, target);
@@ -129,7 +131,7 @@ public class GeyserSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(target)) return false;
 		
 		geyser(null, target, power);

@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.List;
 import java.util.HashSet;
@@ -73,7 +75,7 @@ public class BuildSpell extends TargetedSpell implements TargetedLocationSpell {
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			Player player = (Player) livingEntity;
 			ItemStack item = player.getInventory().getItem(slot);
@@ -97,7 +99,7 @@ public class BuildSpell extends TargetedSpell implements TargetedLocationSpell {
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		if (!(caster instanceof Player)) return false;
 		ItemStack item = ((Player) caster).getInventory().getItem(slot);
 		if (item == null || !isAllowed(item.getType())) return false;
@@ -108,7 +110,7 @@ public class BuildSpell extends TargetedSpell implements TargetedLocationSpell {
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return false;
 	}
 

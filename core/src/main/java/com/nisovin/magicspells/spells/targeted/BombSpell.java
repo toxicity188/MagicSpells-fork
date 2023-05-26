@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.List;
 import java.util.HashSet;
@@ -80,7 +82,7 @@ public class BombSpell extends TargetedSpell implements TargetedLocationSpell, S
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			List<Block> blocks = getLastTwoTargetedBlocks(livingEntity, power);
 			if (blocks.size() != 2) return noTarget(livingEntity);
@@ -94,16 +96,16 @@ public class BombSpell extends TargetedSpell implements TargetedLocationSpell, S
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		return bomb(caster, target, power);
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return bomb(null, target, power);
 	}
 
-	private boolean bomb(LivingEntity livingEntity, Location loc, float power) {
+	private boolean bomb(LivingEntity livingEntity, Location loc, Power power) {
 		if (material == null) return false;
 		Block block = loc.getBlock();
 		if (!BlockUtils.isAir(block.getType())) return false;

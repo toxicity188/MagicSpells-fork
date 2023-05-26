@@ -1,5 +1,8 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.LivingEntity;
@@ -55,7 +58,7 @@ public class PainSpell extends TargetedSpell implements TargetedEntitySpell, Spe
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power);
 			if (target == null) return noTarget(livingEntity);
@@ -72,13 +75,13 @@ public class PainSpell extends TargetedSpell implements TargetedEntitySpell, Spe
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
 		return causePain(caster, target, power);
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(target)) return false;
 		return causePain(null, target, power);
 	}
@@ -88,10 +91,10 @@ public class PainSpell extends TargetedSpell implements TargetedEntitySpell, Spe
 		return spellDamageType;
 	}
 	
-	private boolean causePain(LivingEntity caster, LivingEntity target, float power) {
+	private boolean causePain(LivingEntity caster, LivingEntity target, Power power) {
 		if (target == null) return false;
 		if (target.isDead()) return false;
-		double localDamage = damage * power;
+		double localDamage = damage * power.doubleValue();
 
 		if (checkPlugins) {
 			MagicSpellsEntityDamageByEntityEvent event = new MagicSpellsEntityDamageByEntityEvent(caster, target, damageType, localDamage);

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.ChatColor;
@@ -37,7 +38,7 @@ import com.nisovin.magicspells.events.MagicSpellsGenericPlayerEvent;
 
 public class MenuSpell extends TargetedSpell implements TargetedEntitySpell, TargetedLocationSpell {
 
-	private Map<UUID, Float> castPower = new HashMap<>();
+	private Map<UUID, Power> castPower = new HashMap<>();
 	private Map<UUID, Location> castLocTarget = new HashMap<>();
 	private Map<UUID, LivingEntity> castEntityTarget = new HashMap<>();
 	private Map<String, MenuOption> options = new LinkedHashMap<>();
@@ -94,7 +95,7 @@ public class MenuSpell extends TargetedSpell implements TargetedEntitySpell, Tar
 			option.slot = optionSlot;
 			option.menuOptionName = optionName;
 			option.spellName = optionSpellName;
-			option.power = optionPower;
+			option.power = new Power(optionPower);
 			option.item = optionItem;
 			option.modifierList = modifierList;
 			option.stayOpen = optionStayOpen;
@@ -121,7 +122,7 @@ public class MenuSpell extends TargetedSpell implements TargetedEntitySpell, Tar
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			Player player = (Player) livingEntity;
 			LivingEntity entityTarget = null;
@@ -149,7 +150,7 @@ public class MenuSpell extends TargetedSpell implements TargetedEntitySpell, Tar
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (requireEntityTarget && !validTargetList.canTarget(caster, target)) return false;
 		if (!(caster instanceof Player)) return false;
 		Player opener = (Player) caster;
@@ -163,7 +164,7 @@ public class MenuSpell extends TargetedSpell implements TargetedEntitySpell, Tar
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		if (!targetOpensMenuInstead) return false;
 		if (requireEntityTarget && !validTargetList.canTarget(target)) return false;
 		if (!(target instanceof Player)) return false;
@@ -172,14 +173,14 @@ public class MenuSpell extends TargetedSpell implements TargetedEntitySpell, Tar
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		if (!(caster instanceof Player)) return false;
 		open((Player) caster, (Player) caster, null, target, power, MagicSpells.NULL_ARGS);
 		return true;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return false;
 	}
 
@@ -189,7 +190,7 @@ public class MenuSpell extends TargetedSpell implements TargetedEntitySpell, Tar
 		Player player = PlayerNameUtils.getPlayer(args[0]);
 		String[] spellArgs = args.length > 1 ? Arrays.copyOfRange(args, 1, args.length) : null;
 		if (player != null) {
-			open(null, player, null, null, 1, spellArgs);
+			open(null, player, null, null, new Power(1), spellArgs);
 			return true;
 		}
 		return false;
@@ -201,7 +202,7 @@ public class MenuSpell extends TargetedSpell implements TargetedEntitySpell, Tar
 		return item.getType().name() + '_' + durability + '_' + item.getItemMeta().getDisplayName();
 	}
 	
-	private void open(final Player caster, Player opener, LivingEntity entityTarget, Location locTarget, final float power, final String[] args) {
+	private void open(final Player caster, Player opener, LivingEntity entityTarget, Location locTarget, final Power power, final String[] args) {
 		if (delay < 0) {
 			openMenu(caster, opener, entityTarget, locTarget, power, args);
 			return;
@@ -212,7 +213,7 @@ public class MenuSpell extends TargetedSpell implements TargetedEntitySpell, Tar
 		MagicSpells.scheduleDelayedTask(() -> openMenu(caster, p, e, l, power, args), delay);
 	}
 	
-	private void openMenu(Player caster, Player opener, LivingEntity entityTarget, Location locTarget, float power, String[] args) {
+	private void openMenu(Player caster, Player opener, LivingEntity entityTarget, Location locTarget, Power power, String[] args) {
 		castPower.put(opener.getUniqueId(), power);
 		if (requireEntityTarget && entityTarget != null) castEntityTarget.put(opener.getUniqueId(), entityTarget);
 		if (requireLocationTarget && locTarget != null) castLocTarget.put(opener.getUniqueId(), locTarget);
@@ -272,8 +273,8 @@ public class MenuSpell extends TargetedSpell implements TargetedEntitySpell, Tar
 					MenuOption option = options.get(key);
 					Subspell spell = option.spell;
 					if (spell != null) {
-						float power = option.power;
-						if (castPower.containsKey(id)) power *= castPower.get(id);
+						Power power = option.power;
+						if (castPower.containsKey(id)) power = power.multiply(castPower.get(id));
 
 						if (spell.isTargetedEntitySpell() && castEntityTarget.containsKey(id)) spell.castAtEntity(player, castEntityTarget.get(id), power);
 						else if (spell.isTargetedLocationSpell() && castLocTarget.containsKey(id)) spell.castAtLocation(player, castLocTarget.get(id), power);
@@ -308,7 +309,7 @@ public class MenuSpell extends TargetedSpell implements TargetedEntitySpell, Tar
 		private ItemStack item;
 		private String spellName;
 		private Subspell spell;
-		private float power;
+		private Power power;
 		private List<String> modifierList;
 		private ModifierSet menuOptionModifiers;
 		private boolean stayOpen;

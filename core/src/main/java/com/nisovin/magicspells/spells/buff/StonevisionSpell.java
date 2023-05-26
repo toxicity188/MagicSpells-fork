@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
@@ -69,7 +71,7 @@ public class StonevisionSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		if (!(entity instanceof Player)) return true;
 		seers.put(entity.getUniqueId(), new TransparentBlockSet((Player) entity, radius, transparentTypes));
 		return true;

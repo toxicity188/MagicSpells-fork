@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.HashMap;
@@ -35,8 +37,8 @@ public class HasteSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
-		hasted.put(entity.getUniqueId(), Math.round(strength * power));
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
+		hasted.put(entity.getUniqueId(), Math.round(strength * power.intValue()));
 		return true;
 	}
 

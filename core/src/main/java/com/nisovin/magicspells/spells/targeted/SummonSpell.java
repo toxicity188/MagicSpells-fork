@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -61,7 +63,7 @@ public class SummonSpell extends TargetedSpell implements TargetedEntitySpell, T
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && caster instanceof Player) {
 			// Get target name and landing location
 			String targetName = "";
@@ -70,7 +72,7 @@ public class SummonSpell extends TargetedSpell implements TargetedEntitySpell, T
 				targetName = args[0];
 				landLoc = caster.getLocation().add(0, .25, 0);
 			} else {
-				Block block = getTargetedBlock(caster, 10);
+				Block block = getTargetedBlock(caster, new Power(10));
 				if (block != null && (block.getType().name().contains("SIGN"))) {
 					Sign sign = (Sign)block.getState();
 					targetName = sign.getLine(0);
@@ -122,22 +124,22 @@ public class SummonSpell extends TargetedSpell implements TargetedEntitySpell, T
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		return target.teleport(caster);
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return false;
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(LivingEntity caster, Location from, LivingEntity target, Power power) {
 		return target.teleport(from);
 	}
 
 	@Override
-	public boolean castAtEntityFromLocation(Location from, LivingEntity target, float power) {
+	public boolean castAtEntityFromLocation(Location from, LivingEntity target, Power power) {
 		return target.teleport(from);
 	}
 

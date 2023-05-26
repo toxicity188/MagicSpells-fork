@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -80,7 +82,7 @@ public class RitualSpell extends InstantSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (spellToCast == null || !(livingEntity instanceof Player)) return PostCastAction.ALREADY_HANDLED;
 		Player player = (Player) livingEntity;
 		if (activeRituals.containsKey(player)) {
@@ -131,13 +133,13 @@ public class RitualSpell extends InstantSpell {
 	private class ActiveRitual implements Runnable {
 		
 		private Player caster;
-		private float power;
+		private Power power;
 		private String[] args;
 		private int duration = 0;
 		private int taskId;
 		private Map<Player, Location> channelers;
 
-		private ActiveRitual(Player caster, float power, String[] args) {
+		private ActiveRitual(Player caster, Power power, String[] args) {
 			this.caster = caster;
 			this.power = power;
 			this.args = args;

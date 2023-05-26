@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -72,7 +74,7 @@ public class RewindSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			if (targetSelf) new Rewinder(livingEntity, livingEntity, power);
 			else {
@@ -87,7 +89,7 @@ public class RewindSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity player, LivingEntity livingEntity, float v) {
+	public boolean castAtEntity(LivingEntity player, LivingEntity livingEntity, Power v) {
 		new Rewinder(player, livingEntity, v);
 		sendMessages(player, livingEntity);
 		playSpellEffects(EffectPosition.CASTER, player);
@@ -97,7 +99,7 @@ public class RewindSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity livingEntity, float v) {
+	public boolean castAtEntity(LivingEntity livingEntity, Power v) {
 		new Rewinder(null, livingEntity, v);
 		playSpellEffects(EffectPosition.TARGET, livingEntity);
 		return true;
@@ -128,11 +130,11 @@ public class RewindSpell extends TargetedSpell implements TargetedEntitySpell {
 		private double startHealth;
 
 		private LivingEntity caster;
-		private float power;
+		private Power power;
 		private LivingEntity entity;
 		private List<Location> locations;
 
-		private Rewinder(LivingEntity caster, LivingEntity entity, float power) {
+		private Rewinder(LivingEntity caster, LivingEntity entity, Power power) {
 			this.locations = new ArrayList<>();
 			this.caster = caster;
 			this.power = power;

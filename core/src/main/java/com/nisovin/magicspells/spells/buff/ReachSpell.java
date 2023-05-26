@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.buff;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.List;
 import java.util.UUID;
@@ -69,7 +71,7 @@ public class ReachSpell extends BuffSpell {
 	}
 
 	@Override
-	public boolean castBuff(LivingEntity entity, float power, String[] args) {
+	public boolean castBuff(LivingEntity entity, Power power, String[] args) {
 		reaching.add(entity.getUniqueId());
 		return true;
 	}
@@ -101,7 +103,7 @@ public class ReachSpell extends BuffSpell {
 		
 		// Get targeted block
 		Action action = event.getAction();
-		List<Block> targets = getLastTwoTargetedBlocks(player, range);
+		List<Block> targets = getLastTwoTargetedBlocks(player, new Power(range));
 
 		Block airBlock;
 		Block targetBlock;

@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.Map;
 import java.util.UUID;
@@ -53,14 +55,14 @@ public class StunSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 	
 	@Override
-	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity caster, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> targetInfo = getTargetedEntity(caster, power);
 			if (targetInfo == null) return noTarget(caster);
 			LivingEntity target = targetInfo.getTarget();
 			power = targetInfo.getPower();
 			
-			stunLivingEntity(caster, target, Math.round(duration * power));
+			stunLivingEntity(caster, target, Math.round(duration * power.intValue()));
 			sendMessages(caster, target);
 			return PostCastAction.NO_MESSAGES;
 		}
@@ -68,16 +70,16 @@ public class StunSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 	
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(caster, target)) return false;
-		stunLivingEntity(caster, target, Math.round(duration * power));
+		stunLivingEntity(caster, target, Math.round(duration * power.intValue()));
 		return true;
 	}
 	
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		if (!validTargetList.canTarget(target)) return false;
-		stunLivingEntity(null, target, Math.round(duration * power));
+		stunLivingEntity(null, target, Math.round(duration * power.intValue()));
 		return true;
 	}
 	

@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.HashSet;
 import java.util.ArrayList;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
@@ -31,7 +32,7 @@ public class ProjectileTracker implements Runnable {
 	private Random rand = new Random();
 
 	private LivingEntity caster;
-	private float power;
+	private Power power;
 	private long startTime;
 	private Location startLocation;
 	private Location previousLocation;
@@ -115,7 +116,7 @@ public class ProjectileTracker implements Runnable {
 
 	}
 
-	public ProjectileTracker(LivingEntity caster, float power) {
+	public ProjectileTracker(LivingEntity caster, Power power) {
 		this.caster = caster;
 		this.power = power;
 	}
@@ -180,7 +181,7 @@ public class ProjectileTracker implements Runnable {
 			currentVelocity.setY(0).normalize();
 			currentLocation.setPitch(0);
 		}
-		if (powerAffectsVelocity) currentVelocity.multiply(power);
+		if (powerAffectsVelocity) currentVelocity.multiply(power.doubleValue());
 		currentVelocity.multiply(projectileVelocity / ticksPerSecond);
 		nearBlocks = new ArrayList<>();
 		if (targetList != null) inRange = new ArrayList<>();
@@ -478,11 +479,11 @@ public class ProjectileTracker implements Runnable {
 		this.caster = caster;
 	}
 
-	public float getPower() {
+	public Power getPower() {
 		return power;
 	}
 
-	public void setPower(float power) {
+	public void setPower(Power power) {
 		this.power = power;
 	}
 

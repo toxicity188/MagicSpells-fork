@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -93,7 +95,7 @@ public class CarpetSpell extends TargetedSpell implements TargetedLocationSpell,
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			Player player = (Player) livingEntity;
 			Location loc = null;
@@ -111,7 +113,7 @@ public class CarpetSpell extends TargetedSpell implements TargetedLocationSpell,
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		if (!(caster instanceof Player)) return false;
 		if (targetSelf) layCarpet((Player) caster, caster.getLocation(), power);
 		else layCarpet((Player) caster, target, power);
@@ -119,12 +121,12 @@ public class CarpetSpell extends TargetedSpell implements TargetedLocationSpell,
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		layCarpet(null, target, power);
 		return true;
 	}
 	
-	private void layCarpet(Player player, Location loc, float power) {
+	private void layCarpet(Player player, Location loc, Power power) {
 		if (!loc.getBlock().getType().isOccluding()) {
 			int c = 0;
 			while (!loc.getBlock().getRelative(0, -1, 0).getType().isOccluding() && c <= 2) {
@@ -141,7 +143,7 @@ public class CarpetSpell extends TargetedSpell implements TargetedLocationSpell,
 
 		Block b;
 		int y = loc.getBlockY();
-		int rad = Math.round(radius * power);
+		int rad = Math.round(radius * power.intValue());
 
 		final List<Block> blockList = new ArrayList<>();
 		for (int x = loc.getBlockX() - rad; x <= loc.getBlockX() + rad; x++) {
@@ -193,7 +195,7 @@ public class CarpetSpell extends TargetedSpell implements TargetedLocationSpell,
 				if (player.equals(caster)) continue;
 				if (!material.equals(b.getType())) continue;
 				
-				SpellTargetEvent event = new SpellTargetEvent(spellOnTouch.getSpell(), caster, player, 1F);
+				SpellTargetEvent event = new SpellTargetEvent(spellOnTouch.getSpell(), caster, player, new Power(1));
 				EventUtil.call(event);
 				if (event.isCancelled()) continue;
 

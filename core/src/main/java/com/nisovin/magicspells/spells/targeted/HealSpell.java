@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import com.nisovin.magicspells.events.SpellApplyHealEvent;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
@@ -42,7 +44,7 @@ public class HealSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			TargetInfo<LivingEntity> targetInfo = getTargetedEntity(livingEntity, power, checker);
 			if (targetInfo == null) return noTarget(livingEntity);
@@ -58,13 +60,13 @@ public class HealSpell extends TargetedSpell implements TargetedEntitySpell {
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		if (validTargetList.canTarget(caster, target) && target.getHealth() < Util.getMaxHealth(target)) return heal(caster, target, power);
 		return false;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		if (validTargetList.canTarget(target) && target.getHealth() < Util.getMaxHealth(target)) return heal(null, target, power);
 		return false;
 	}
@@ -74,11 +76,11 @@ public class HealSpell extends TargetedSpell implements TargetedEntitySpell {
 		return checker;
 	}
 	
-	private boolean heal(LivingEntity livingEntity, LivingEntity target, float power) {
+	private boolean heal(LivingEntity livingEntity, LivingEntity target, Power power) {
 		double health = target.getHealth();
 		double maxHealth = Util.getMaxHealth(target);
 
-		SpellApplyHealEvent event = new SpellApplyHealEvent(this,livingEntity,target,healAmount * power + healAmountPercentage/100*maxHealth);
+		SpellApplyHealEvent event = new SpellApplyHealEvent(this,livingEntity,target,healAmount * power.doubleValue() + healAmountPercentage/100*maxHealth);
 		EventUtil.call(event);
 		double amt = event.getAmount();
 

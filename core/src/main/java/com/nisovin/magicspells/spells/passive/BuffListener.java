@@ -3,6 +3,7 @@ package com.nisovin.magicspells.spells.passive;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.nisovin.magicspells.power.Power;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -94,7 +95,7 @@ public class BuffListener extends PassiveListener {
 			if (!(s.getSpell() instanceof BuffSpell)) continue;
 			BuffSpell buff = (BuffSpell) s.getSpell();
 			if (buff.isActive(player)) continue;
-			buff.castAtEntity(player, player, 1F);
+			buff.castAtEntity(player, player, new Power(1));
 		}
 	}
 

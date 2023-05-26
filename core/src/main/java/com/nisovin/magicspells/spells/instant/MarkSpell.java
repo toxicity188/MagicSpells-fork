@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.io.File;
 import java.util.Map;
 import java.util.UUID;
@@ -67,7 +69,7 @@ public class MarkSpell extends InstantSpell implements TargetedLocationSpell {
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			marks.put(getKey(livingEntity), new MagicLocation(livingEntity.getLocation()));
 			if (permanentMarks) saveMarks();
@@ -77,14 +79,14 @@ public class MarkSpell extends InstantSpell implements TargetedLocationSpell {
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		marks.put(getKey(caster), new MagicLocation(target));
 		if (caster != null) playSpellEffects(caster, target);
 		return true;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return false;
 	}
 	

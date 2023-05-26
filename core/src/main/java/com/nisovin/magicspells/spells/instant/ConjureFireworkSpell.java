@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.instant;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -114,7 +116,7 @@ public class ConjureFireworkSpell extends InstantSpell implements TargetedLocati
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL && livingEntity instanceof Player) {
 			Player player = (Player) livingEntity;
 			boolean added = false;
@@ -133,13 +135,13 @@ public class ConjureFireworkSpell extends InstantSpell implements TargetedLocati
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		playSpellEffects(EffectPosition.CASTER, caster);
 		return castAtLocation(target, power);
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		ItemStack item = firework.clone();
 		Item dropped = target.getWorld().dropItem(target, item);
 		dropped.setItemStack(item);

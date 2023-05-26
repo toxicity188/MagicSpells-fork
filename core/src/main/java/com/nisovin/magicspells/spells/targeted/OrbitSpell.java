@@ -1,5 +1,7 @@
 package com.nisovin.magicspells.spells.targeted;
 
+import com.nisovin.magicspells.power.Power;
+
 import java.util.Set;
 import java.util.List;
 import java.util.HashSet;
@@ -118,7 +120,7 @@ public class OrbitSpell extends TargetedSpell implements TargetedEntitySpell, Ta
 	}
 
 	@Override
-	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, float power, String[] args) {
+	public PostCastAction castSpell(LivingEntity livingEntity, SpellCastState state, Power power, String[] args) {
 		if (state == SpellCastState.NORMAL) {
 			if (requireEntityTarget) {
 				TargetInfo<LivingEntity> target = getTargetedEntity(livingEntity, power);
@@ -149,25 +151,25 @@ public class OrbitSpell extends TargetedSpell implements TargetedEntitySpell, Ta
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity caster, LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity caster, LivingEntity target, Power power) {
 		new OrbitTracker(caster, target, power);
 		playSpellEffects(caster, target);
 		return true;
 	}
 
 	@Override
-	public boolean castAtEntity(LivingEntity target, float power) {
+	public boolean castAtEntity(LivingEntity target, Power power) {
 		return false;
 	}
 
 	@Override
-	public boolean castAtLocation(LivingEntity caster, Location target, float power) {
+	public boolean castAtLocation(LivingEntity caster, Location target, Power power) {
 		new OrbitTracker(caster, target, power);
 		return true;
 	}
 
 	@Override
-	public boolean castAtLocation(Location target, float power) {
+	public boolean castAtLocation(Location target, Power power) {
 		return false;
 	}
 
@@ -180,7 +182,7 @@ public class OrbitSpell extends TargetedSpell implements TargetedEntitySpell, Ta
 		private BoundingBox box;
 		private Set<LivingEntity> immune;
 
-		private float power;
+		private Power power;
 		private float orbRadius;
 		private float orbHeight;
 
@@ -190,7 +192,7 @@ public class OrbitSpell extends TargetedSpell implements TargetedEntitySpell, Ta
 
 		private long startTime;
 
-		private OrbitTracker(LivingEntity caster, LivingEntity target, float power) {
+		private OrbitTracker(LivingEntity caster, LivingEntity target, Power power) {
 			this.caster = caster;
 			this.target = target;
 			this.power = power;
@@ -199,7 +201,7 @@ public class OrbitSpell extends TargetedSpell implements TargetedEntitySpell, Ta
 			initialize();
 		}
 
-		private OrbitTracker(LivingEntity caster, Location targetLoc, float power) {
+		private OrbitTracker(LivingEntity caster, Location targetLoc, Power power) {
 			this.caster = caster;
 			this.targetLoc = targetLoc;
 			this.power = power;
